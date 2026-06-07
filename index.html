@@ -21,7 +21,7 @@
   canvas#map{max-width:100%;max-height:100%;cursor:pointer;display:block;}
   .left,.right{display:none;}
   #stage.city .left{display:flex;} #stage.city .right{display:flex;}
-  .left{position:absolute;top:5px;left:5px;bottom:5px;z-index:7;width:250px;flex-direction:column;gap:4px;}
+  .left{position:absolute;top:5px;left:5px;bottom:5px;z-index:7;width:150px;flex-direction:column;gap:4px;}
   .box{background:var(--pink);border:2px solid var(--brown);border-radius:3px;padding:3px 6px;box-shadow:inset 0 0 0 2px var(--pink2);}
   .lord{font-size:12px;line-height:1.45;color:var(--brown2);} .lord b{color:#9c2b1e;}
   .statehead{font-size:18px;font-weight:bold;color:var(--brown2);display:flex;align-items:baseline;gap:6px;}
@@ -29,27 +29,41 @@
   .stats{font-size:12px;line-height:1.5;}
   .stats .r{display:flex;justify-content:space-between;} .stats .r span:last-child{font-weight:bold;color:var(--brown2);}
   .stats .gm{display:flex;gap:12px;}
-  .cmdbar{min-height:34px;display:flex;flex-wrap:wrap;gap:3px;}
+  .cmdbar{min-height:0;display:flex;flex-wrap:wrap;gap:3px;}
   .cmdbar button{flex:1 1 30%;font-family:inherit;font-size:12px;background:var(--pink2);border:2px solid var(--brown);border-radius:3px;padding:4px 1px;cursor:pointer;color:var(--ink);}
   .cmdbar button:disabled{opacity:.4;} .cmdbar button.atk{background:#e8c9a0;border-color:#8a3a1a;color:#7a2a10;font-weight:bold;}
   .cmdbar .hint{flex:1 1 100%;font-size:11px;color:#8a5a3a;text-align:center;align-self:center;}
-  .builds{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:auto;}
-  .bld{background:var(--pink2);border:2px solid var(--brown);border-radius:3px;padding:3px 1px;cursor:pointer;text-align:center;font-size:11px;color:var(--brown2);}
-  .bld.on{background:var(--gold);} .bld svg{display:block;margin:0 auto 1px;width:30px;height:22px;}
+  .builds{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-top:auto;align-self:flex-start;width:330px;}
+  .bld{background:var(--pink);border:2px solid var(--brown);border-radius:3px;padding:3px;cursor:pointer;text-align:center;font-size:14px;color:var(--brown2);}
+  .bld.on{background:var(--gold);}
+  .bld .bav{width:100%;aspect-ratio:1;background:#f7e9d5;border:2px solid var(--brown2);border-radius:3px;display:flex;align-items:center;justify-content:center;margin-bottom:3px;overflow:hidden;}
+  .bld .bav svg{width:80%;height:80%;}
   .right{position:absolute;top:5px;right:5px;bottom:5px;z-index:7;width:74px;flex-direction:column;gap:5px;}
   .rbtn{background:var(--pink);border:2px solid var(--brown);border-radius:3px;cursor:pointer;font-family:inherit;font-size:14px;color:var(--brown2);padding:9px 3px;text-align:center;}
   .rbtn.face{padding:3px;} .rbtn.face .av{width:100%;aspect-ratio:1;background:var(--gold);border:2px solid var(--brown2);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:2px;}
-  .rbtn.end{background:#6b2f1d;color:var(--gold);border-color:var(--gold);font-weight:bold;margin-top:auto;}
+  .rbtn.end{background:#6b2f1d;color:var(--gold);border-color:var(--gold);font-weight:bold;}
   #hud{position:absolute;inset:0;pointer-events:none;z-index:8;} #stage.city #hud{display:none;} #hud>*{pointer-events:auto;}
   .datebar{position:absolute;top:8px;left:8px;background:var(--pink);border:2px solid var(--brown);border-radius:3px;padding:3px 10px;font-size:16px;font-weight:bold;color:var(--brown2);display:flex;gap:7px;align-items:center;box-shadow:inset 0 0 0 2px var(--pink2);}
   .datebar .ico{width:20px;height:20px;background:var(--navy);color:#fff;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:13px;}
   .round{position:absolute;width:50px;height:50px;border-radius:50%;border:3px solid #aeb9d0;cursor:pointer;background:radial-gradient(circle at 34% 28%,#fff,#c6d0e2 70%,#9aa6c0);color:#33406a;font-size:22px;box-shadow:0 2px 6px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;}
-  #hud-skip{top:64px;left:14px;} #hud-set,#hud-set2{right:14px;font-size:13px;} #hud-set{bottom:14px;} #hud-set2{bottom:72px;}
+  #hud-skip{top:64px;left:14px;} #hud-set,#hud-set2{width:42px;height:42px;font-size:11px;right:14px;} #hud-set{bottom:14px;} #hud-set2{bottom:62px;}
   #hud-msg{position:absolute;bottom:10px;left:10px;max-width:62%;background:var(--pink);border:2px solid var(--brown);border-radius:3px;padding:6px 14px;font-size:15px;font-weight:bold;color:#9c2b1e;box-shadow:inset 0 0 0 2px var(--pink2);transition:opacity .2s;}
   #hud-msg.faded{opacity:.22;pointer-events:none;}
-  #setmenu{position:absolute;bottom:130px;right:14px;display:none;flex-direction:column;gap:4px;width:96px;}
-  #setmenu2{position:absolute;bottom:130px;right:14px;display:none;flex-direction:column;gap:4px;width:96px;z-index:9;}
-  #setmenu button,#setmenu2 button{font-family:inherit;font-size:13px;background:var(--pink);border:2px solid var(--brown);border-radius:3px;padding:6px 3px;cursor:pointer;color:var(--brown2);box-shadow:inset 0 0 0 2px var(--pink2);}
+  #setmenu{position:absolute;bottom:110px;right:14px;display:none;flex-direction:column;gap:4px;width:82px;}
+  #setmenu2{position:absolute;bottom:110px;right:14px;display:none;flex-direction:column;gap:4px;width:82px;z-index:9;}
+  #setmenu button,#setmenu2 button{font-family:inherit;font-size:11px;background:var(--pink);border:2px solid var(--brown);border-radius:3px;padding:5px 2px;cursor:pointer;color:var(--brown2);box-shadow:inset 0 0 0 2px var(--pink2);}
+  .slotrow{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--pink2);border:2px solid var(--brown);border-radius:3px;padding:7px 10px;cursor:pointer;font-size:13px;color:var(--ink);}
+  .slotrow:active{background:var(--gold);}
+  .slotrow.dis{opacity:.45;cursor:default;}
+  .slotrow b{color:var(--brown2);} .slotrow span{font-size:12px;color:#7a4a35;}
+  #editor{display:none;position:absolute;inset:0;z-index:20;pointer-events:none;}
+  #ed-left{position:absolute;left:5px;top:35px;bottom:35px;width:64%;background:var(--pink);border:3px solid var(--gold);box-shadow:inset 0 0 0 2px var(--brown);padding:10px 20px;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;gap:16px;pointer-events:auto;}
+  #ed-block{position:absolute;left:0;top:0;bottom:0;right:84px;pointer-events:auto;}
+  .edrow{display:grid;grid-template-columns:64px 116px 48px 1fr 48px;align-items:center;gap:12px;font-size:26px;color:var(--brown2);}
+  .edlbl{font-weight:bold;text-align:center;white-space:nowrap;}
+  .edval{text-align:right;font-weight:bold;cursor:pointer;background:#fbeee0;border:2px solid #c9a06a;border-radius:5px;padding:3px 8px;}
+  .edbtn{height:42px;font-size:22px;background:var(--pink2);border:2px solid var(--brown);border-radius:5px;cursor:pointer;color:var(--brown2);}
+  .edsl{width:100%;}
   #rotate{display:none;position:fixed;inset:0;z-index:99;background:var(--navy2);color:var(--gold);flex-direction:column;align-items:center;justify-content:center;font-size:20px;text-align:center;padding:30px;gap:14px;}
   @media (orientation:portrait) and (pointer:coarse){#rotate{display:flex;}}
   .overlay{position:fixed;inset:0;background:rgba(10,15,40,.85);display:flex;align-items:center;justify-content:center;z-index:50;padding:14px;}
@@ -69,6 +83,13 @@
   .mmbtn{font-family:inherit;font-size:20px;letter-spacing:5px;padding:11px;background:linear-gradient(#f3e3ca,#e8c9a0);border:3px solid var(--gold);border-radius:5px;color:#5a3526;cursor:pointer;font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,.5);}
   .mmbtn:active{background:var(--gold);}
   #start{background:#101935;}
+  .gcard{display:flex;align-items:center;gap:12px;background:var(--pink2);border:2px solid var(--brown);border-radius:5px;padding:8px 12px;box-shadow:inset 0 0 0 2px var(--pink);}
+  .gportrait{width:50px;height:50px;flex:0 0 auto;background:var(--gold);border:2px solid var(--brown2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:bold;color:#5a3526;}
+  .ginfo{flex:1;text-align:left;}
+  .gname{font-size:18px;font-weight:bold;color:#9c2b1e;}
+  .gname small{font-size:12px;color:#7a4a35;font-weight:normal;}
+  .gstats{font-size:14px;color:var(--brown2);margin-top:3px;}
+  .gstats2{font-size:13px;color:#7a4a35;margin-top:2px;}
 </style>
 </head>
 <body>
@@ -89,26 +110,27 @@
         <div class="r"><span>武將 <span id="s-gen">0</span></span><span>在野 <span id="s-wild">0</span></span></div>
         <div class="r"><span>士兵</span><span id="s-troops">—</span></div>
       </div>
-      <div class="box cmdbar" id="cmdbar"><div class="hint">選擇下方指令</div></div>
+      <div class="cmdbar" id="cmdbar"></div>
       <div class="builds">
-        <div class="bld" data-menu="gov"><svg viewBox="0 0 34 26"><polygon points="2,12 17,3 32,12" fill="#3a6ea5"/><rect x="5" y="12" width="24" height="12" fill="#e8b94a"/><rect x="14" y="16" width="6" height="8" fill="#7a4a35"/></svg>政廳</div>
-        <div class="bld" data-menu="army"><svg viewBox="0 0 34 26"><circle cx="17" cy="9" r="6" fill="#e8b94a"/><rect x="10" y="15" width="14" height="9" fill="#c0392b"/><rect x="24" y="4" width="3" height="20" fill="#7a4a35"/></svg>軍隊</div>
-        <div class="bld" data-menu="store"><svg viewBox="0 0 34 26"><polygon points="2,10 17,2 32,10" fill="#7a4a35"/><rect x="5" y="10" width="24" height="14" fill="#c9a06a"/><rect x="9" y="14" width="6" height="10" fill="#5a3526"/><rect x="19" y="14" width="6" height="10" fill="#5a3526"/></svg>倉庫</div>
-        <div class="bld" data-menu="market"><svg viewBox="0 0 34 26"><rect x="3" y="11" width="12" height="13" fill="#4a8ccc"/><rect x="19" y="11" width="12" height="13" fill="#e8934a"/><polygon points="2,11 9,5 16,11" fill="#7a4a35"/><polygon points="18,11 25,5 32,11" fill="#7a4a35"/></svg>市集</div>
+        <div class="bld" data-menu="gov"><div class="bav"><svg viewBox="0 0 34 26"><polygon points="2,12 17,3 32,12" fill="#3a6ea5"/><rect x="5" y="12" width="24" height="12" fill="#e8b94a"/><rect x="14" y="16" width="6" height="8" fill="#7a4a35"/></svg></div>政廳</div>
+        <div class="bld" data-menu="army"><div class="bav"><svg viewBox="0 0 34 26"><circle cx="17" cy="9" r="6" fill="#e8b94a"/><rect x="10" y="15" width="14" height="9" fill="#c0392b"/><rect x="24" y="4" width="3" height="20" fill="#7a4a35"/></svg></div>軍隊</div>
+        <div class="bld" data-menu="store"><div class="bav"><svg viewBox="0 0 34 26"><polygon points="2,10 17,2 32,10" fill="#7a4a35"/><rect x="5" y="10" width="24" height="14" fill="#c9a06a"/><rect x="9" y="14" width="6" height="10" fill="#5a3526"/><rect x="19" y="14" width="6" height="10" fill="#5a3526"/></svg></div>倉庫</div>
+        <div class="bld" data-menu="market"><div class="bav"><svg viewBox="0 0 34 26"><rect x="3" y="11" width="12" height="13" fill="#4a8ccc"/><rect x="19" y="11" width="12" height="13" fill="#e8934a"/><polygon points="2,11 9,5 16,11" fill="#7a4a35"/><polygon points="18,11 25,5 32,11" fill="#7a4a35"/></svg></div>市集</div>
       </div>
     </div>
     <div class="center"><canvas id="map" width="1000" height="562"></canvas></div>
     <div class="right">
-      <div class="rbtn face" id="btn-gen"><div class="av">⚔</div>武將</div>
-      <div class="rbtn end" id="btn-back2">結束<br>回合</div>
+      <div class="rbtn end" id="btn-back2">編輯</div>
+      <div class="rbtn" id="btn-edmax" style="display:none" onclick="edMax()">最大</div>
+      <div class="rbtn face" id="btn-gen" style="margin-top:auto"><div class="av">⚔</div>武將</div>
       <div class="rbtn" id="btn-back">返回</div>
     </div>
   </div>
   <div id="hud">
     <div class="datebar"><span id="h-ym">190年 1月</span><span class="ico">⚑</span><span id="h-ap">4</span></div>
     <div class="round" id="hud-skip" title="進行">⏭</div>
-    <div class="round" id="hud-set" title="設定（測試員）">⚙</div>
-    <div class="round" id="hud-set2" title="金手指／資料一覽">★</div>
+    <div class="round" id="hud-set" title="設定（測試）">⚙</div>
+    <div class="round" id="hud-set2" title="設定（玩家）">★</div>
     <div id="setmenu">
       <button onclick="openGen()">武　將</button>
       <button onclick="openLog()">戰　報</button>
@@ -175,17 +197,39 @@
   <div id="sb-body"></div>
   <div class="bbtns" id="sb-btns"></div>
 </div></div>
+<div id="editor"><div id="ed-block"></div><div id="ed-left"></div></div>
+<div class="overlay" id="gencards" style="display:none"><div class="modal" style="max-width:540px">
+  <h2 id="gc-title" style="letter-spacing:2px;font-size:20px">城內武將</h2>
+  <div id="gc-body" style="max-height:56vh;overflow-y:auto;display:flex;flex-direction:column;gap:7px"></div>
+  <div class="bbtns"><button onclick="gcPage(-1)">◀ 上頁</button><span id="gc-page" style="align-self:center;min-width:64px;text-align:center;font-weight:bold"></span><button onclick="gcPage(1)">下頁 ▶</button><button onclick="$('gencards').style.display='none'">關閉</button></div>
+</div></div>
 <script>
 const $=id=>document.getElementById(id);
 const CITIES=[
  {id:1,name:"薊",prov:"幽州",x:780,y:90},{id:2,name:"北平",prov:"幽州",x:862,y:74},{id:3,name:"漁陽",prov:"幽州",x:812,y:128},{id:4,name:"雁門",prov:"并州",x:632,y:112},{id:5,name:"晉陽",prov:"并州",x:642,y:192},{id:6,name:"上黨",prov:"并州",x:680,y:255},{id:7,name:"南皮",prov:"冀州",x:795,y:200},{id:8,name:"鄴",prov:"冀州",x:722,y:250},{id:9,name:"平原",prov:"冀州",x:820,y:262},{id:10,name:"信都",prov:"冀州",x:760,y:212},{id:11,name:"北海",prov:"青州",x:872,y:312},{id:12,name:"臨淄",prov:"青州",x:832,y:300},{id:13,name:"濮陽",prov:"兗州",x:742,y:312},{id:14,name:"陳留",prov:"兗州",x:692,y:350},{id:15,name:"泰山",prov:"兗州",x:802,y:342},{id:16,name:"許昌",prov:"豫州",x:684,y:392},{id:17,name:"汝南",prov:"豫州",x:722,y:440},{id:18,name:"譙",prov:"豫州",x:772,y:402},
  {id:19,name:"彭城",prov:"徐州",x:822,y:372},{id:20,name:"下邳",prov:"徐州",x:852,y:402},{id:21,name:"廣陵",prov:"徐州",x:882,y:442},{id:22,name:"洛陽",prov:"司隸",x:612,y:346},{id:23,name:"弘農",prov:"司隸",x:560,y:346},{id:24,name:"長安",prov:"司隸",x:490,y:336},{id:25,name:"安定",prov:"涼州",x:420,y:276},{id:26,name:"天水",prov:"涼州",x:350,y:326},{id:27,name:"金城",prov:"涼州",x:290,y:326},{id:28,name:"武威",prov:"涼州",x:320,y:236},{id:29,name:"西平",prov:"涼州",x:250,y:300},{id:30,name:"漢中",prov:"益州",x:440,y:396},{id:31,name:"梓潼",prov:"益州",x:380,y:436},{id:32,name:"成都",prov:"益州",x:310,y:466},{id:33,name:"江州",prov:"益州",x:420,y:506},{id:34,name:"永安",prov:"益州",x:500,y:500},{id:35,name:"建寧",prov:"益州",x:360,y:632},{id:36,name:"新野",prov:"荊州",x:650,y:446},
  {id:37,name:"襄陽",prov:"荊州",x:650,y:492},{id:38,name:"江陵",prov:"荊州",x:620,y:548},{id:39,name:"江夏",prov:"荊州",x:732,y:526},{id:40,name:"武陵",prov:"荊州",x:590,y:626},{id:41,name:"長沙",prov:"荊州",x:682,y:626},{id:42,name:"零陵",prov:"荊州",x:620,y:692},{id:43,name:"桂陽",prov:"荊州",x:712,y:696},{id:44,name:"壽春",prov:"揚州",x:782,y:456},{id:45,name:"廬江",prov:"揚州",x:812,y:486},{id:46,name:"柴桑",prov:"揚州",x:762,y:566},{id:47,name:"豫章",prov:"揚州",x:812,y:606},{id:48,name:"廬陵",prov:"揚州",x:812,y:686},{id:49,name:"建業",prov:"揚州",x:892,y:482},{id:50,name:"吳",prov:"揚州",x:932,y:506},{id:51,name:"會稽",prov:"揚州",x:905,y:566},{id:52,name:"蒼梧",prov:"交州",x:690,y:755},{id:53,name:"南海",prov:"交州",x:772,y:760},
- {id:54,name:"雲南",prov:"益州",x:180,y:505},{id:55,name:"交趾",prov:"交州",x:390,y:515},{id:56,name:"建安",prov:"揚州",x:735,y:445},{id:57,name:"涪陵",prov:"益州",x:310,y:385},{id:58,name:"陳倉",prov:"司隸",x:322,y:252},{id:59,name:"五丈原",prov:"司隸",x:345,y:288},{id:60,name:"常山",prov:"冀州",x:548,y:150},{id:61,name:"宜都",prov:"荊州",x:432,y:358},{id:62,name:"新城",prov:"荊州",x:462,y:308},{id:63,name:"官渡",prov:"兗州",x:608,y:205},{id:64,name:"虎牢關",prov:"司隸",x:540,y:236},{id:65,name:"武都",prov:"涼州",x:290,y:240},{id:66,name:"東萊",prov:"青州",x:760,y:160},{id:67,name:"夷洲",prov:"揚州",x:840,y:470},{id:68,name:"葭萌關",prov:"益州",x:355,y:318},{id:69,name:"陽平關",prov:"益州",x:345,y:275},{id:70,name:"河內",prov:"司隸",x:575,y:240}];
-const EDGES=[[1,2],[1,3],[1,10],[2,3],[3,7],[4,5],[5,6],[5,8],[6,22],[6,8],[7,8],[7,9],[7,10],[8,10],[8,13],[9,10],[9,12],[9,11],[11,12],[12,15],[11,20],[13,14],[13,15],[14,16],[14,22],[15,19],[15,12],[16,17],[16,18],[16,22],[16,36],[17,18],[17,44],[18,19],[18,20],[17,20],[19,20],[20,21],[19,15],[21,44],[21,49],[22,23],[23,24],[24,25],[24,30],[24,26],[25,26],[26,27],[27,29],[28,25],[28,27],[26,30],[30,31],[31,32],[32,33],[33,34],[30,34],[33,35],[32,35],[34,38],[36,37],[37,38],[38,39],[38,40],[40,41],[41,39],[41,42],[41,43],[42,43],[40,42],[39,46],[43,52],[38,34],[44,45],[45,49],[46,47],[47,48],[49,50],[50,51],[51,47],[46,39],[44,17],[48,43],[47,51],[45,46],[52,53],[52,43],[48,53],[42,52],[54,35],[54,55],[55,52],[55,53],[56,51],[56,48],[56,53],[57,33],[57,34],[58,24],[58,30],[58,59],[58,26],[59,24],[59,30],[60,5],[60,10],[60,8],[61,38],[61,40],[61,34],[62,30],[62,37],[63,16],[63,14],[63,8],[64,22],[64,16],[64,63],[65,30],[65,26],[65,58],[66,11],[66,12],[67,51],[67,56],[68,30],[68,31],[68,69],[69,30],[69,65],[70,22],[70,6],[70,8]];
+ {id:54,name:"雲南",prov:"益州",x:180,y:505},{id:55,name:"交趾",prov:"交州",x:390,y:515},{id:56,name:"建安",prov:"揚州",x:735,y:445},{id:57,name:"涪陵",prov:"益州",x:310,y:385},{id:58,name:"陳倉",prov:"司隸",x:322,y:252},{id:59,name:"五丈原",prov:"司隸",x:345,y:288},{id:60,name:"常山",prov:"冀州",x:548,y:150},{id:61,name:"宜都",prov:"荊州",x:432,y:358},{id:62,name:"新城",prov:"荊州",x:462,y:308},{id:63,name:"官渡",prov:"兗州",x:608,y:205},{id:64,name:"虎牢關",prov:"司隸",x:540,y:236},{id:65,name:"武都",prov:"涼州",x:290,y:240},{id:66,name:"東萊",prov:"青州",x:760,y:160},{id:67,name:"夷洲",prov:"揚州",x:840,y:470},{id:68,name:"葭萌關",prov:"益州",x:355,y:318},{id:69,name:"陽平關",prov:"益州",x:345,y:275},{id:70,name:"河內",prov:"司隸",x:575,y:240},{id:71,name:"遼東",prov:"幽州",x:825,y:45},{id:72,name:"西安陽",prov:"并州",x:475,y:72},{id:73,name:"西平關",prov:"涼州",x:88,y:190},{id:74,name:"衡陽",prov:"荊州",x:615,y:405},{id:75,name:"鬱林",prov:"交州",x:500,y:558},{id:76,name:"永昌",prov:"益州",x:90,y:540}];
+const EDGES=[[1,2],[1,3],[1,10],[2,3],[3,7],[4,5],[5,6],[5,8],[6,22],[6,8],[7,8],[7,9],[7,10],[8,10],[8,13],[9,10],[9,12],[9,11],[11,12],[12,15],[11,20],[13,14],[13,15],[14,16],[14,22],[15,19],[15,12],[16,17],[16,18],[16,22],[16,36],[17,18],[17,44],[18,19],[18,20],[17,20],[19,20],[20,21],[19,15],[21,44],[21,49],[22,23],[23,24],[24,25],[24,30],[24,26],[25,26],[26,27],[27,29],[28,25],[28,27],[26,30],[30,31],[31,32],[32,33],[33,34],[30,34],[33,35],[32,35],[34,38],[36,37],[37,38],[38,39],[38,40],[40,41],[41,39],[41,42],[41,43],[42,43],[40,42],[39,46],[43,52],[38,34],[44,45],[45,49],[46,47],[47,48],[49,50],[50,51],[51,47],[46,39],[44,17],[48,43],[47,51],[45,46],[52,53],[52,43],[48,53],[42,52],[54,35],[54,55],[55,52],[55,53],[56,51],[56,48],[56,53],[57,33],[57,34],[58,24],[58,30],[58,59],[58,26],[59,24],[59,30],[60,5],[60,10],[60,8],[61,38],[61,40],[61,34],[62,30],[62,37],[63,16],[63,14],[63,8],[64,22],[64,16],[64,63],[65,30],[65,26],[65,58],[66,11],[66,12],[67,51],[67,56],[68,30],[68,31],[68,69],[69,30],[69,65],[70,22],[70,6],[70,8],[71,2],[72,4],[72,5],[73,29],[73,27],[74,41],[74,43],[75,52],[75,55],[75,53],[76,54],[76,35]];
 const ADJ={};CITIES.forEach(c=>ADJ[c.id]=[]);
 EDGES.forEach(([a,b])=>{if(!ADJ[a].includes(b))ADJ[a].push(b);if(!ADJ[b].includes(a))ADJ[b].push(a);});
-const GEN={"曹操":[72,91,96],"夏侯惇":[90,60,85],"夏侯淵":[91,63,84],"曹仁":[87,72,88],"荀彧":[14,95,75],"于禁":[80,68,82],"樂進":[85,52,75],"典韋":[97,37,60],"徐晃":[89,65,85],"張遼":[92,78,92],"張郃":[89,69,86],"袁紹":[62,75,80],"顏良":[94,40,70],"文醜":[93,40,70],"審配":[40,80,70],"沮授":[25,90,75],"公孫瓚":[78,55,76],"趙雲":[96,76,91],"嚴綱":[70,30,55],"劉備":[73,74,80],"關羽":[97,75,95],"張飛":[98,30,85],"呂布":[100,30,72],"陳宮":[30,88,78],"高順":[82,60,82],"袁術":[50,60,60],"紀靈":[80,45,70],"張勳":[60,40,55],"孫策":[92,68,85],"周瑜":[70,96,95],"程普":[78,65,80],"黃蓋":[80,68,75],"太史慈":[90,60,82],"周泰":[88,45,70],"劉表":[50,70,65],"蔡瑁":[65,55,60],"黃祖":[60,40,55],"文聘":[85,62,80],"劉璋":[30,55,45],"嚴顏":[82,65,78],"張任":[86,72,82],"黃權":[65,80,72],"馬騰":[84,52,80],"馬超":[97,44,88],"韓遂":[70,68,75],"龐德":[92,58,80],"董卓":[82,40,70],"李傕":[80,50,65],"郭汜":[78,45,60],"賈詡":[40,97,80],"張魯":[40,65,55],"楊任":[70,55,65],"楊昂":[68,45,60],"孔融":[20,82,55],"武安國":[75,30,55],"諸葛亮":[38,100,92],"龐統":[40,97,88],"黃忠":[93,62,85],"魏延":[88,62,80],"甘寧":[92,66,82],"徐庶":[60,93,82],"陸遜":[75,94,93],"呂蒙":[85,82,86],"魯肅":[54,92,85],"張昭":[20,88,75],"法正":[45,94,80],"馬良":[30,88,72],"華雄":[88,40,72],"田豐":[25,93,76],"廖化":[78,55,72],"孫權":[50,80,86],"張角":[58,80,82],"張梁":[76,42,60],"張寶":[74,46,62],"皇甫嵩":[84,82,90],"朱儁":[80,74,82],"盧植":[72,84,84],"孫堅":[90,70,87],"韓當":[82,52,74],"祖茂":[76,40,60]};
+const GD={
+"曹操":[82,84,90,89,100,97,"山","破斬劍","甲冑"],"夏侯惇":[94,89,91,60,92,68,"山","單鉤鎗","兜"],"夏侯淵":[96,87,91,33,91,51,"山","眉尖刀","籠手"],"曹仁":[84,76,90,59,89,64,"水","矛","籠手"],"荀彧":[59,34,62,96,92,74,"平","短劍","綸巾"],"于禁":[77,79,91,56,86,59,"水","薤刀","兜"],"樂進":[80,56,85,50,85,60,"平","矛","籠手"],"典韋":[97,96,96,26,93,39,"山","雙戟","兜"],"徐晃":[93,91,91,50,88,47,"山","戰斧","兜"],"張遼":[92,90,90,84,90,90,"水","單鉤鎗","硬皮"],"張郃":[83,89,91,43,67,56,"山","眉尖刀","兜"],
+"袁紹":[75,70,87,52,100,50,"水","長劍","硬皮"],"顏良":[91,89,91,37,87,52,"山","鉤鐮刀","兜"],"文醜":[92,90,90,31,83,50,"山","長劍","兜"],"審配":[71,66,89,80,90,65,"水","飛劍","綸巾"],"沮授":[52,41,73,84,88,71,"平","短劍","綸巾"],
+"公孫瓚":[80,78,88,55,100,50,"平","長劍","硬皮"],"趙雲":[98,97,97,86,77,94,"山","單鉤鎗","兜"],"嚴綱":[60,55,83,51,67,48,"平","飛劍","籠手"],
+"劉備":[78,71,91,65,100,99,"平","長劍","兜"],"關羽":[97,97,97,84,99,88,"水","偃月刀","籠手"],"張飛":[99,98,98,20,98,35,"山","矛","硬皮"],
+"呂布":[99,99,99,17,30,10,"山","方天畫戟","甲冑"],"陳宮":[70,55,80,88,80,70,"平","短劍","綸巾"],"高順":[80,82,88,45,82,60,"山","矛","兜"],
+"袁術":[65,50,70,55,100,40,"平","長劍","硬皮"],"紀靈":[80,70,89,31,57,36,"水","三尖刀","兜"],"張勳":[70,60,82,40,75,45,"平","矛","籠手"],
+"孫策":[90,95,95,61,100,90,"水","大劍","硬皮"],"周瑜":[70,87,91,98,98,96,"水","破斬劍","硬皮"],"程普":[80,60,85,68,89,79,"平","雙戟","兜"],"黃蓋":[72,79,91,63,84,80,"水","薤刀","籠手"],"太史慈":[92,94,94,49,85,76,"山","單鉤鎗","兜"],"周泰":[87,82,90,33,78,60,"水","矛","籠手"],
+"劉表":[70,55,80,70,100,80,"水","長劍","硬皮"],"蔡瑁":[68,55,82,55,70,50,"水","薤刀","籠手"],"黃祖":[66,58,82,40,68,45,"水","矛","籠手"],"文聘":[89,81,91,53,67,65,"山","眉尖刀","籠手"],
+"劉璋":[61,39,71,44,100,77,"平","短劍","綸巾"],"嚴顏":[85,86,90,66,86,86,"山","薤刀","兜"],"張任":[90,84,90,74,93,90,"山","雙戟","兜"],"黃權":[59,42,78,78,87,68,"平","短劍","綸巾"],
+"馬騰":[80,82,90,54,100,84,"山","長劍","硬皮"],"馬超":[97,97,97,52,99,76,"山","戰斧","硬皮"],"韓遂":[68,43,79,81,76,78,"平","短劍","綸巾"],"龐德":[95,94,94,60,79,78,"山","鳳嘴刀","硬皮"],
+"董卓":[88,87,91,47,100,11,"山","大劍","硬皮"],"李傕":[70,72,90,17,82,24,"山","三尖刀","籠手"],"郭汜":[66,62,88,24,81,12,"水","雙戟","籠手"],"賈詡":[52,46,76,95,70,65,"平","短劍","綸巾"],
+"張魯":[70,40,70,65,100,85,"山","矛","兜"],"楊任":[75,70,88,55,80,55,"山","矛","籠手"],"楊昂":[72,68,86,45,78,50,"山","矛","籠手"],"孔融":[50,20,55,82,100,80,"平","短劍","綸巾"],"武安國":[87,80,90,21,65,36,"山","雙戟","籠手"],
+"諸葛亮":[71,62,84,99,97,95,"水","長劍","鶴氅"],"龐統":[68,39,66,98,55,73,"平","飛劍","綸巾"],"黃忠":[90,96,96,64,78,75,"山","鉤鐮刀","兜"],"魏延":[95,94,94,42,55,26,"山","眉尖刀","兜"],"甘寧":[94,93,93,60,84,79,"水","眉尖刀","籠手"],"徐庶":[73,74,90,96,67,80,"山","長劍","綸巾"],"陸遜":[65,77,87,97,88,83,"水","長劍","硬皮"],"呂蒙":[75,87,91,93,85,91,"水","長劍","硬皮"],"魯肅":[40,39,66,95,89,93,"平","飛劍","綸巾"],"張昭":[50,20,55,88,90,88,"平","短劍","綸巾"],"法正":[61,33,66,92,72,82,"平","短劍","綸巾"],"馬良":[45,45,75,94,73,88,"平","短劍","綸巾"],"華雄":[95,90,90,32,85,43,"山","長劍","兜"],"田豐":[40,35,68,93,90,89,"平","短劍","綸巾"],"廖化":[81,72,90,54,67,41,"水","眉尖刀","兜"],"孫權":[82,83,91,88,99,95,"水","破斬劍","硬皮"],
+"張角":[70,58,78,80,100,80,"平","長劍","硬皮"],"張梁":[75,76,86,42,85,45,"平","矛","籠手"],"張寶":[73,74,86,46,85,50,"平","矛","籠手"],"皇甫嵩":[82,84,90,82,100,82,"山","長劍","兜"],"朱儁":[80,80,90,74,90,78,"山","薤刀","兜"],"盧植":[72,72,88,84,90,84,"平","長劍","綸巾"],"孫堅":[90,90,92,68,100,85,"水","大劍","硬皮"],"韓當":[84,70,89,50,83,88,"水","矛","籠手"],"祖茂":[76,68,82,40,80,60,"水","矛","籠手"]
+};
+const GEN={};Object.keys(GD).forEach(n=>{const d=GD[n];GEN[n]=[d[1],d[3],d[2]];});
 const FACTIONS=[
  {id:"cao",name:"曹操",flag:"曹",color:"#3a6ea5",cities:[14,13],gens:["曹操","夏侯惇","夏侯淵","曹仁","荀彧","于禁","樂進","典韋"]},
  {id:"yuan",name:"袁紹",flag:"袁",color:"#7d4fa5",cities:[8,7],gens:["袁紹","顏良","文醜","張郃","審配","沮授"]},
@@ -253,19 +297,19 @@ const SCENARIOS=[
  {id:"s214",name:"三國初分",sub:"214年・劉備入蜀，魏蜀吳鼎立漸成",year:214,month:5,names:{sun:"孫權"},
   setup:{
    cao:{cities:[8,16,14,13,15,18,17,19,20,21,22,23,24,7,9,10,11,12,5,6,4,1,2,3,36,37,25,26,27,28,29],gens:["曹操","夏侯惇","夏侯淵","曹仁","荀彧","于禁","樂進","徐晃","張遼","張郃","賈詡","徐庶"]},
-   liu:{cities:[32,31,33,34,35,38,40,41,42,43],gens:["劉備","關羽","張飛","趙雲","諸葛亮","馬超","黃忠","魏延","法正"]},
+   liu:{cities:[32,31,33,34,35,38,40,41,42,43],gens:["劉備","關羽","張飛","趙雲","諸葛亮","馬超","黃忠","魏延","法正"],gov:58},
    sun:{cities:[50,49,51,45,47,46,44,48,39],gens:["孫權","魯肅","呂蒙","陸遜","程普","黃蓋","甘寧","張昭","周泰","韓當"]},
    lu:{cities:[30],gens:["張魯","楊任","楊昂"]}},
   wild:[["廖化",43],["馬良",40]]}];
 let curScenario=SCENARIOS[0];
 const BUFW=1000,BUFH=562,POS_KEY='sgmap_pos_v1';
-const PD=[[630,62],[728,51],[662,83],[568,58],[506,131],[513,223],[662,104],[582,159],[662,139],[582,122],[710,151],[682,165],[590,205],[566,217],[631,202],[583,240],[589,271],[659,238],[683,214],[755,204],[837,268],[516,251],[434,241],[391,234],[423,143],[202,151],[176,169],[86,82],[137,125],[390,291],[281,305],[166,345],[251,367],[365,333],[237,448],[544,274],[512,292],[476,330],[651,343],[521,392],[567,373],[531,434],[595,448],[721,267],[663,371],[721,339],[699,390],[648,427],[779,280],[864,318],[794,364],[436,407],[596,503],[133,488],[463,516],[784,453],[378,391],[295,205],[319,232],[540,163],[434,304],[462,276],[621,156],[540,236],[207,208],[760,160],[899,466],[236,234],[272,251],[508,188]];
+const PD=[[629,71],[728,51],[662,83],[568,58],[504,129],[513,223],[662,104],[582,159],[664,137],[582,122],[710,151],[682,165],[590,205],[566,217],[631,202],[583,240],[589,271],[659,238],[683,214],[755,204],[837,268],[516,251],[434,241],[391,234],[421,142],[202,151],[176,169],[87,88],[288,116],[390,291],[281,305],[166,345],[251,367],[365,333],[237,448],[545,273],[512,292],[476,330],[651,343],[523,393],[565,376],[531,434],[595,448],[721,267],[663,371],[721,339],[699,390],[648,427],[779,280],[864,318],[793,361],[436,407],[596,503],[133,488],[463,516],[782,451],[378,391],[295,205],[319,232],[540,163],[434,304],[462,276],[621,156],[547,239],[207,208],[760,170],[899,466],[236,233],[271,250],[508,188],[804,70],[548,84],[237,150],[565,408],[556,511],[176,480]];
 const POS={};CITIES.forEach((c,i)=>POS[c.id]={x:PD[i][0],y:PD[i][1]});
 function loadPos(){try{const s=JSON.parse(localStorage.getItem(POS_KEY));if(s)Object.keys(s).forEach(k=>{if(POS[k])POS[k]=s[k];});}catch(e){}}
 function savePos(){try{localStorage.setItem(POS_KEY,JSON.stringify(POS));}catch(e){}}
 loadPos();
 let state=null,selected=null,activeMenu=null,pendingAction=null,gameOver=false;
-let mapImg=null,battleImg=null,history=[],editMode=false,dragId=null,guided=false,guidedIdx=0,hideFlags=false,testUnlocked=false;
+let mapImg=null,battleImg=null,history=[],editMode=false,dragId=null,guided=false,guidedIdx=0,hideFlags=false,testUnlocked=false,bgm=null;
 function tryLoadAsset(src){return new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src;});}
 const rnd=n=>Math.floor(Math.random()*n);
 const facOf=id=>FACTIONS.find(f=>f.id===id);
@@ -276,19 +320,20 @@ const cityById=id=>CITIES.find(c=>c.id===id);
 const playerCities=()=>CITIES.filter(c=>state.cs[c.id].owner===state.player);
 function topGen(cid){const g=state.cs[cid].gens;if(!g.length)return null;return g.reduce((a,b)=>(GEN[b][0]+GEN[b][2])>(GEN[a][0]+GEN[a][2])?b:a);}
 function recalcAp(){state.maxAp=Math.min(12,3+playerCities().length);state.ap=state.maxAp;}
+const FGOV={cao:82,yuan:85,gsz:68,liu:78,lvbu:52,yshu:55,sun:70,biao:85,zhang:72,ma:66,dong:50,lu:88,kong:72,huang:60,han:88};
 function ownCityBoost(c){c.gov=100;c.land=120+rnd(40);c.ind=110+rnd(40);c.pop=22000+rnd(8000);c.flood=85+rnd(14);c.gold=100+rnd(80);c.rice=350+rnd(200);c.troops=2000+rnd(2000);}
 function initGame(pid){
   const sc=curScenario,cs={};
   CITIES.forEach(c=>{cs[c.id]={owner:null,land:80+rnd(70),ind:70+rnd(60),pop:15000+rnd(15000),flood:50+rnd(40),gov:60+rnd(30),gold:50+rnd(100),rice:200+rnd(300),troops:1000+rnd(2000),gens:[],wild:[]};});
-  const apply=(fid,cities,gens)=>{cities.forEach(cid=>{const c=cs[cid];c.owner=fid;ownCityBoost(c);});gens.forEach((g,i)=>cs[cities[i%cities.length]].gens.push(g));};
-  if(sc.setup){Object.keys(sc.setup).forEach(fid=>apply(fid,sc.setup[fid].cities,sc.setup[fid].gens));}
+  const apply=(fid,cities,gens,gov)=>{const gv=(gov!=null?gov:(FGOV[fid]!=null?FGOV[fid]:100));cities.forEach(cid=>{const c=cs[cid];c.owner=fid;ownCityBoost(c);c.gov=gv;});gens.forEach((g,i)=>cs[cities[i%cities.length]].gens.push(g));};
+  if(sc.setup){Object.keys(sc.setup).forEach(fid=>apply(fid,sc.setup[fid].cities,sc.setup[fid].gens,sc.setup[fid].gov));}
   else{FACTIONS.forEach(f=>{if(f.cities.length)apply(f.id,f.cities,f.gens);});}
   (sc.wild||WILD).forEach(([g,cid])=>cs[cid].wild.push(g));
   const alive={};FACTIONS.forEach(f=>alive[f.id]=sc.setup?!!sc.setup[f.id]:f.cities.length>0);
   state={cs,year:sc.year,month:sc.month,player:pid,alive,ap:0,maxAp:0};recalcAp();
   gameOver=false;selected=null;activeMenu=null;pendingAction=null;
   $('start').style.display='none';
-  exitCity();log("sys","【"+facName(pid)+"】起兵！"+sc.name+"，逐鹿天下。");refreshAll();
+  exitCity();log("sys","【"+facName(pid)+"】起兵！"+sc.name+"，逐鹿天下。");refreshAll();playBgm();
 }
 function enterCity(cid){selected=cid;$('stage').classList.add('city');refreshLeft();renderCmd();drawMap();}
 function exitCity(){$('stage').classList.remove('city');activeMenu=null;pendingAction=null;selected=null;setPrompt();drawMap();}
@@ -300,11 +345,11 @@ function cmdShogyo(){if(!ownSel())return;const c=state.cs[selected];if(!needAp()
 function cmdChisui(){if(!ownSel())return;const c=state.cs[selected];if(!needAp())return;if(c.gold<20){log("sys","金不足。");return;}c.gold-=20;c.flood=Math.min(100,c.flood+5+rnd(4));spend();log("good","["+cityById(selected).name+"] 治水，防災→"+c.flood);after();}
 function cmdChohei(){if(!ownSel())return;const c=state.cs[selected];if(!needAp())return;const room=Math.floor(c.pop*0.2)-c.troops;const amt=Math.min(1000,room,Math.floor(c.gold/0.05),Math.floor(c.rice/0.1));if(amt<100){log("sys","金、米或人口不足，無法徵兵。");return;}c.troops+=amt;c.gold-=Math.ceil(amt*0.05);c.rice-=Math.ceil(amt*0.1);c.pop-=amt;spend();log("good","["+cityById(selected).name+"] 徵兵 "+amt+"，士兵→"+c.troops);after();}
 function cmdTrain(){if(!ownSel())return;const c=state.cs[selected];if(!needAp())return;if(c.gold<15){log("sys","金不足。");return;}c.gold-=15;c.gov=Math.min(100,c.gov+4);spend();log("good","["+cityById(selected).name+"] 訓練，統治度→"+c.gov);after();}
-function cmdTouyo(){if(!ownSel())return;const c=state.cs[selected];if(!needAp())return;if(!c.wild||!c.wild.length){log("sys","此城無在野武將。");return;}if(c.gold<50){log("sys","金不足（登用需 50）。");return;}const g=c.wild[0],myG=topGen(selected),charm=myG?GEN[myG][1]:30,chance=0.35+charm/250;c.gold-=50;spend();if(Math.random()<chance){c.wild.shift();c.gens.push(g);log("good","★ ["+cityById(selected).name+"] 登用 "+g+" 成功！武"+GEN[g][0]+"/智"+GEN[g][1]+"/統"+GEN[g][2]);}else{log("war","["+cityById(selected).name+"] 招攬 "+g+"，對方婉拒（耗50金）。");}after();}
+function cmdTouyo(){if(!ownSel())return;const c=state.cs[selected];if(!needAp())return;if(!c.wild||!c.wild.length){log("sys","此城無在野武將。");return;}if(c.gens.length>=10){log("sys","此城武將已滿（10 名）。");return;}if(c.gold<50){log("sys","金不足（登用需 50）。");return;}const g=c.wild[0],myG=topGen(selected),charm=myG?GEN[myG][1]:30,chance=0.35+charm/250;c.gold-=50;spend();if(Math.random()<chance){c.wild.shift();c.gens.push(g);log("good","★ ["+cityById(selected).name+"] 登用 "+g+" 成功！武"+GEN[g][0]+"/智"+GEN[g][1]+"/統"+GEN[g][2]);}else{log("war","["+cityById(selected).name+"] 招攬 "+g+"，對方婉拒（耗50金）。");}after();}
 function cmdBuyRice(){if(!ownSel())return;const c=state.cs[selected];if(!needAp())return;if(c.gold<50){log("sys","金不足。");return;}c.gold-=50;c.rice+=80;spend();log("good","["+cityById(selected).name+"] 購米 80（-50金）");after();}
 function cmdSellRice(){if(!ownSel())return;const c=state.cs[selected];if(!needAp())return;if(c.rice<80){log("sys","米不足。");return;}c.rice-=80;c.gold+=40;spend();log("good","["+cityById(selected).name+"] 賣米 80（+40金）");after();}
 function cmdShutsujin(){if(!ownSel())return;if(state.cs[selected].troops<800){log("sys","兵力不足以出陣。");return;}pendingAction={type:'attack',from:selected};log("sys","點選相鄰敵城發動進攻（高亮）。");drawMap();}
-function cmdIdo(){if(!ownSel())return;if(state.cs[selected].troops<200){log("sys","兵力不足。");return;}pendingAction={type:'move',from:selected};log("sys","點選相鄰我城移動兵力（高亮）。");drawMap();}
+function cmdIdo(){if(!ownSel())return;if(state.cs[selected].troops<200){log("sys","兵力不足。");return;}pendingAction={type:'move',from:selected};log("sys","點相鄰我城移兵，或相鄰空城進駐佔領（高亮）。");drawMap();}
 function cmdYuso(){if(!ownSel())return;pendingAction={type:'send',from:selected};log("sys","點選相鄰我城輸送金米（高亮）。");drawMap();}
 function resolveBattle(fromId,toId,isAI,aiFac){
   const A=state.cs[fromId],D=state.cs[toId];const aG=topGen(fromId),dG=topGen(toId);
@@ -315,13 +360,15 @@ function resolveBattle(fromId,toId,isAI,aiFac){
     const ap=data.atk*(0.5+aL/130)*(0.85+Math.random()*0.4)+aW*6;
     const dp=data.def*(0.5+dL/130)*(0.85+Math.random()*0.4)*(1+wall/200)+dW*6;
     data.atk=Math.max(0,data.atk-Math.floor(dp*0.10));data.def=Math.max(0,data.def-Math.floor(ap*0.10));}
-  if(data.def<=0&&data.atk>0){data.win=true;const old=D.owner;D.owner=A.owner;D.troops=data.atk;D.gens=[];D.gov=Math.max(40,D.gov-20);if(aG){A.gens=A.gens.filter(g=>g!==aG);D.gens.push(aG);}if(old)checkElim(old);}
+  if(data.def<=0&&data.atk>0){data.win=true;const old=D.owner;D.owner=A.owner;D.troops=data.atk;D.gens=[];D.gov=40;if(aG){A.gens=A.gens.filter(g=>g!==aG);D.gens.push(aG);}if(old)checkElim(old);}
   else{A.troops+=data.atk;D.troops=data.def;}
   if(isAI){log("war","✖ 【"+facName(aiFac)+"】"+(data.win?"攻陷 ":"進攻 ")+cityById(toId).name+(data.win?"":"（守住）"));checkVictory();}
   else{showBattleScreen(data);}
   return data;
 }
-function showBattleScreen(data){
+function playBgm(){if(bgm){bgm.play().catch(function(){});}}
+function pauseBgm(){if(bgm){try{bgm.pause();}catch(e){}}}
+function showBattleScreen(data){pauseBgm();
   const ov=$('battle');ov.style.display='flex';
   $('b-title').textContent=cityById(data.toId).name+" 攻防戰";
   const g=$('battleCanvas').getContext('2d');
@@ -342,21 +389,27 @@ function showBattleScreen(data){
   function finish(){const bb=$('b-btns');bb.innerHTML="";
     const m=document.createElement('div');m.style.cssText="width:100%;font-size:16px;color:#9c2b1e;font-weight:bold";
     m.textContent=data.win?("★ 攻陷 "+cityById(data.toId).name+"！殘兵 "+data.atk):("守城成功…攻方撤退（殘兵 "+data.atk+"）");bb.appendChild(m);
-    const b=document.createElement('button');b.textContent="確定";b.onclick=()=>{ov.style.display='none';pendingAction=null;log(data.win?"good":"war",(data.win?"★ 攻陷 ":"✖ 未能攻下 ")+cityById(data.toId).name);checkVictory();after();};bb.appendChild(b);}
+    const b=document.createElement('button');b.textContent="確定";b.onclick=()=>{ov.style.display='none';playBgm();pendingAction=null;log(data.win?"good":"war",(data.win?"★ 攻陷 ":"✖ 未能攻下 ")+cityById(data.toId).name);checkVictory();after();};bb.appendChild(b);}
   draw(0);requestAnimationFrame(tick);
 }
-function doMove(fromId,toId){const A=state.cs[fromId],B=state.cs[toId];const send=Math.floor(A.troops*0.85);A.troops-=send;B.troops+=send;const g=topGen(fromId);if(g){A.gens=A.gens.filter(x=>x!==g);B.gens.push(g);}spend();pendingAction=null;log("good","["+cityById(fromId).name+"] 移兵 "+send+(g?("、"+g):"")+" → "+cityById(toId).name);after();}
+function doMove(fromId,toId){const A=state.cs[fromId],B=state.cs[toId];const occ=(B.owner==null);const send=Math.floor(A.troops*0.85);A.troops-=send;B.troops+=send;const g=topGen(fromId);if(g&&B.gens.length<10){A.gens=A.gens.filter(x=>x!==g);B.gens.push(g);}if(occ){B.owner=state.player;B.gov=60;}spend();pendingAction=null;log("good","["+cityById(fromId).name+"] "+(occ?"進駐佔領 ":"移兵 ")+send+(g?("、"+g):"")+" → "+cityById(toId).name+(occ?"（統治度60）":""));after();}
 function doSend(fromId,toId){const A=state.cs[fromId],B=state.cs[toId];const gold=Math.floor(A.gold*0.5),rice=Math.floor(A.rice*0.5);A.gold-=gold;A.rice-=rice;B.gold+=gold;B.rice+=rice;spend();pendingAction=null;log("good","["+cityById(fromId).name+"] 輸送 金"+gold+" 米"+rice+" → "+cityById(toId).name);after();}
 function checkElim(fid){const has=CITIES.some(c=>state.cs[c.id].owner===fid);if(!has&&state.alive[fid]){state.alive[fid]=false;log("war","✖ 【"+facName(fid)+"】勢力滅亡！");}}
 function checkVictory(){const en=FACTIONS.filter(f=>f.id!==state.player&&state.alive[f.id]);if(en.length===0&&!gameOver){gameOver=true;setTimeout(()=>showEnd(true),300);}if(state.alive[state.player]===false&&!gameOver){gameOver=true;setTimeout(()=>showEnd(false),300);}}
 function endTurn(){if(gameOver)return;$('setmenu').style.display='none';$('setmenu2').style.display='none';exitCity();
   FACTIONS.forEach(f=>{if(f.id!==state.player&&state.alive[f.id])aiTurn(f.id);});
   CITIES.forEach(c=>{const s=state.cs[c.id];if(!s.owner)return;
-    s.gold+=Math.floor(s.ind*(s.gov/100)*0.3);s.rice+=Math.floor(s.land*(s.gov/100)*0.5)-Math.floor(s.troops/100);
-    if(s.rice<0){const lost=Math.min(s.troops,(-s.rice)*5);s.troops-=lost;s.rice=0;if(s.owner===state.player)log("sys","⚠ "+c.name+" 缺糧，逃兵 "+lost);}
-    s.pop+=Math.floor(s.pop*0.01*(s.flood/100));
-    if(Math.random()<(100-s.flood)/400){const d=Math.floor(s.land*0.15);s.land-=d;s.pop-=Math.floor(s.pop*0.03);if(s.owner===state.player)log("war","☂ "+c.name+" 遭天災，土地-"+d);}
+    if(state.month===4)s.gold=Math.min(9999,s.gold+Math.floor(s.ind*(s.gov/100)*3.6));
+    s.rice-=Math.floor(s.troops/100);
+    if(state.month===10)s.rice+=Math.floor(s.land*(s.gov/100)*6);
+    if(s.rice<0){const lost=Math.min(s.troops,(-s.rice)*5);s.troops-=lost;s.rice=0;if(s.owner===state.player)log("sys","⚠ "+c.name+" 缺糧，逃兵 "+lost);}else if(s.rice>9999)s.rice=9999;
+    s.pop+=Math.floor(s.pop*0.01*(s.flood/100));if(s.pop>999900)s.pop=999900;
+    if((state.month===1||state.month===4||state.month===7||state.month===10)&&s.gov<50&&Math.random()<(50-s.gov)/150){s.land=Math.max(0,s.land-100);s.ind=Math.max(0,s.ind-100);s.pop-=Math.floor(s.pop/5);s.troops-=Math.floor(s.troops/5);if(s.owner===state.player)log("war","✊ "+c.name+" 統治度過低，爆發暴動！土地/產業-100、人口/兵士銳減");}
     s.gov=Math.min(100,s.gov+1);});
+  const dz=(state.month>=5&&state.month<=6)?'洪水':((state.month>=8&&state.month<=9)?'旱災':null);
+  if(dz){let pick=[];FACTIONS.forEach(f=>{if(!state.alive[f.id])return;if(Math.random()<0.15){const cz=CITIES.filter(c=>state.cs[c.id].owner===f.id);if(cz.length)pick.push(cz[rnd(cz.length)].id);}});
+    for(let i=pick.length-1;i>0;i--){const j=rnd(i+1);const t=pick[i];pick[i]=pick[j];pick[j]=t;}pick=pick.slice(0,3);
+    pick.forEach(cid=>{const s=state.cs[cid];const mit=1-s.flood/100;const dl=Math.round((15+rnd(36))*mit),di=Math.round((15+rnd(36))*mit),dfv=4+rnd(9);s.land=Math.max(0,s.land-dl);s.ind=Math.max(0,s.ind-di);s.flood=Math.max(0,s.flood-dfv);if(s.owner===state.player)log("war",(dz==='洪水'?"☂ ":"☀ ")+cityById(cid).name+" 遭"+dz+"！土地-"+dl+" 產業-"+di+" 防災-"+dfv);});}
   state.month++;if(state.month>12){state.month=1;state.year++;}
   recalcAp();log("sys","═══ "+state.year+"年 "+state.month+"月 ═══");refreshAll();autoSave();}
 function aiTurn(fid){let ap=Math.min(12,3+CITIES.filter(c=>state.cs[c.id].owner===fid).length);
@@ -365,24 +418,24 @@ function aiTurn(fid){let ap=Math.min(12,3+CITIES.filter(c=>state.cs[c.id].owner=
     const tg=ADJ[cid].filter(id=>state.cs[id].owner!==fid).sort((a,b)=>state.cs[a].troops-state.cs[b].troops)[0];
     if(tg!=null&&s.troops>3000&&s.troops>state.cs[tg].troops*1.25){resolveBattle(cid,tg,true,fid);ap--;continue;}
     if(s.gold>1500&&s.troops<Math.floor(s.pop*0.18)){const amt=Math.min(1000,Math.floor(s.gold/0.05),Math.floor(s.rice/0.1));if(amt>=100){s.troops+=amt;s.gold-=Math.ceil(amt*0.05);s.rice-=Math.ceil(amt*0.1);s.pop-=amt;ap--;continue;}}
-    if(s.wild&&s.wild.length&&s.gold>=300){s.gold-=50;const mg=topGen(cid);if(Math.random()<0.35+(mg?GEN[mg][1]:30)/250)s.gens.push(s.wild.shift());ap--;continue;}
+    if(s.wild&&s.wild.length&&s.gold>=300&&s.gens.length<10){s.gold-=50;const mg=topGen(cid);if(Math.random()<0.35+(mg?GEN[mg][1]:30)/250)s.gens.push(s.wild.shift());ap--;continue;}
     if(s.land<160){s.gold-=20;s.land+=6;ap--;}else if(s.ind<160){s.gold-=20;s.ind+=6;ap--;}else{s.flood=Math.min(100,s.flood+5);ap--;}}}
 const canvas=$('map'),ctx=canvas.getContext('2d');
 function drawMap(){
   if(mapImg){ctx.drawImage(mapImg,0,0,BUFW,BUFH);}
   else{ctx.fillStyle="#6fb3d8";ctx.fillRect(0,0,BUFW,BUFH);ctx.strokeStyle="rgba(120,90,50,.5)";ctx.lineWidth=1.5;EDGES.forEach(([a,b])=>{const pa=POS[a],pb=POS[b];ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();});}
-  let targets=[];if(pendingAction){const f=pendingAction.from;targets=ADJ[f].filter(id=>{if(pendingAction.type==='attack')return state.cs[id].owner!==state.player;return state.cs[id].owner===state.player&&id!==f;});}
+  let targets=[];if(pendingAction){const f=pendingAction.from;targets=ADJ[f].filter(id=>{const o=state.cs[id].owner;if(pendingAction.type==='attack')return o!==state.player;if(pendingAction.type==='move')return (o===state.player||o==null)&&id!==f;return o===state.player&&id!==f;});}
   CITIES.forEach(c=>drawFlag(c,state.cs[c.id],selected===c.id||(guided&&guidedIdx<CITIES.length&&CITIES[guidedIdx].id===c.id),targets.includes(c.id)));
 }
 function drawFlag(c,s,sel,tgt){
-  const p=POS[c.id],ax=p.x,yb=p.y,col=facColor(s.owner),flag=s.owner?facFlag(s.owner):"";const px=ax-2;
+  const p=POS[c.id],ax=p.x,yb=p.y,col=facColor(s.owner),flag=s.owner?facFlag(s.owner):"";const px=ax-9;
   if(tgt){ctx.fillStyle="rgba(240,200,60,.85)";ctx.beginPath();ctx.arc(ax,yb-8,22,0,7);ctx.fill();}
   if(sel){ctx.strokeStyle="#fff";ctx.lineWidth=3;ctx.strokeRect(px-3,yb-30,30,30);}
   if(editMode){ctx.fillStyle="rgba(220,40,40,.9)";ctx.beginPath();ctx.arc(ax,yb,4,0,7);ctx.fill();}
   if(!hideFlags&&s.owner){
-    ctx.strokeStyle="#5a3526";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(px,yb+6);ctx.lineTo(px,yb-30);ctx.stroke();
-    ctx.fillStyle="#000";ctx.fillRect(px-1,yb-30,26,22);ctx.fillStyle=col;ctx.fillRect(px,yb-29,24,20);
-    ctx.fillStyle="#fff";ctx.font="bold 16px 'MingLiU'";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(flag,px+12,yb-19);ctx.textBaseline="alphabetic";
+    ctx.strokeStyle="#5a3526";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(px,yb+2);ctx.lineTo(px,yb-29);ctx.stroke();
+    ctx.fillStyle="#000";ctx.fillRect(px-1,yb-29,22,19);ctx.fillStyle=col;ctx.fillRect(px,yb-28,20,17);
+    ctx.fillStyle="#fff";ctx.font="bold 14px 'MingLiU'";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(flag,px+10,yb-19);ctx.textBaseline="alphabetic";
   }
   ctx.font="bold 11px 'MingLiU'";ctx.textAlign="center";ctx.textBaseline="alphabetic";
   ctx.lineWidth=3;ctx.lineJoin="round";ctx.strokeStyle="#000";ctx.strokeText(c.name,ax,yb+18);
@@ -395,7 +448,7 @@ canvas.addEventListener('click',e=>{
   if(editMode)return;
   let hit=null,best=1600;CITIES.forEach(c=>{const p=POS[c.id];const d=(p.x-mx)**2+(p.y-8-my)**2;if(d<best){best=d;hit=c.id;}});
   if(hit==null){if(!pendingAction&&$('stage').classList.contains('city'))exitCity();return;}
-  if(pendingAction){const f=pendingAction.from;const ok=ADJ[f].includes(hit)&&(pendingAction.type==='attack'?state.cs[hit].owner!==state.player:(state.cs[hit].owner===state.player&&hit!==f));
+  if(pendingAction){const f=pendingAction.from,_t=pendingAction.type,_o=state.cs[hit].owner;let ok=ADJ[f].includes(hit)&&hit!==f;if(ok){ok=_t==='attack'?_o!==state.player:(_t==='move'?(_o===state.player||_o==null):_o===state.player);}
     if(ok){if(pendingAction.type==='attack')resolveBattle(f,hit,false);else if(pendingAction.type==='move')doMove(f,hit);else doSend(f,hit);return;}pendingAction=null;}
   enterCity(hit);
 });
@@ -412,7 +465,7 @@ function toggleFlags(){hideFlags=!hideFlags;$('setmenu').style.display='none';$(
 function toggleEdit(){editMode=!editMode;$('setmenu').style.display='none';if(editMode){exitCity();$('hud-msg').textContent='微調拖曳：拖各城旗到正確位置（自動儲存）。再按 設定→微調拖曳 結束。';}else{setPrompt();}updMsgFade();drawMap();}
 function exportPos(){$('setmenu').style.display='none';$('info-title').textContent='城池座標';const obj={};CITIES.forEach(c=>obj[c.id]=POS[c.id]);$('info-body').innerHTML='<div style="font-size:12px;margin-bottom:6px">已自動存於本機。JSON：</div><textarea style="width:100%;height:38vh;font-size:11px" onclick="this.select()">'+JSON.stringify(obj)+'</textarea>';$('info').style.display='flex';}
 const MENUS={gov:[["開墾",cmdKaiken],["商業",cmdShogyo],["治水",cmdChisui],["徵兵",cmdChohei],["訓練",cmdTrain],["登用",cmdTouyo]],army:[["出陣",cmdShutsujin,1],["移動",cmdIdo]],store:[["輸送",cmdYuso]],market:[["購米",cmdBuyRice],["賣米",cmdSellRice]]};
-function renderCmd(){const bar=$('cmdbar');bar.innerHTML="";document.querySelectorAll('.bld').forEach(b=>b.classList.toggle('on',b.dataset.menu===activeMenu));if(!activeMenu){bar.innerHTML='<div class="hint">選擇下方指令</div>';return;}if(!ownSel()){bar.innerHTML='<div class="hint">此城非我方領地</div>';return;}MENUS[activeMenu].forEach(m=>{const b=document.createElement('button');b.textContent=m[0];if(m[2])b.className='atk';b.onclick=m[1];bar.appendChild(b);});}
+function renderCmd(){const bar=$('cmdbar');bar.innerHTML="";document.querySelectorAll('.bld').forEach(b=>b.classList.toggle('on',b.dataset.menu===activeMenu));if(!activeMenu){bar.innerHTML='';return;}if(!ownSel()){bar.innerHTML='<div class="hint">此城非我方領地</div>';return;}MENUS[activeMenu].forEach(m=>{const b=document.createElement('button');b.textContent=m[0];if(m[2])b.className='atk';b.onclick=m[1];bar.appendChild(b);});}
 function refreshAll(){refreshLeft();renderCmd();drawMap();}
 function refreshLeft(){
   const ym=state.year+"年 "+state.month+"月";
@@ -432,14 +485,25 @@ function setPrompt(){if(state)$('hud-msg').textContent=facName(state.player)+"�
 function log(cls,msg){history.unshift({cls,msg});if(history.length>200)history.pop();$('hud-msg').textContent=msg;}
 document.querySelectorAll('.bld').forEach(b=>b.onclick=()=>{if(!ownSel()){log("sys","此城非我方領地。");}activeMenu=(activeMenu===b.dataset.menu)?null:b.dataset.menu;renderCmd();});
 $('btn-back').onclick=exitCity;
-$('btn-back2').onclick=endTurn;
+$('btn-back2').onclick=openEditor;
 $('hud-skip').onclick=endTurn;
 $('hud-set').onclick=()=>{const m=$('setmenu');if(m.style.display==='flex'){m.style.display='none';return;}if(!testUnlocked){const a=prompt('測試人員密碼：');if(a!=='0525'){if(a!=null)alert('密碼錯誤');return;}testUnlocked=true;}$('setmenu2').style.display='none';m.style.display='flex';};
 $('hud-set2').onclick=()=>{const m=$('setmenu2');$('setmenu').style.display='none';m.style.display=m.style.display==='flex'?'none':'flex';};
-$('btn-gen').onclick=openGen;
+$('btn-gen').onclick=openCityGens;
+const LVEXP=[0,0,20,40,70,100,150,200,300];
+const WATERARM=["孫權","孫策","孫堅","周瑜","程普","黃蓋","太史慈","周泰","魯肅","呂蒙","陸遜","甘寧","韓當","祖茂"];
+const MOUNTARM=["馬騰","馬超","韓遂","龐德","張任","嚴顏","黃權","劉璋","張魯","楊任","楊昂"];
+function genArm(g){return WATERARM.indexOf(g)>=0?"水軍":(MOUNTARM.indexOf(g)>=0?"山軍":"平軍");}
+function genLv(g){const s=GEN[g]||[50,50,50];const p=Math.max(s[0],s[1]);return Math.max(1,Math.min(8,1+Math.floor((p-50)/12)));}
+const GMETA={"曹操":[97,"山"],"夏侯惇":[68,"山"],"夏侯淵":[51,"山"],"曹仁":[64,"水"],"荀彧":[74,"平"],"于禁":[59,"水"],"樂進":[60,"平"],"典韋":[39,"山"],"徐晃":[47,"山"],"張遼":[90,"水"],"張郃":[56,"山"],"袁紹":[50,"水"],"顏良":[52,"山"],"文醜":[50,"山"],"審配":[65,"水"],"沮授":[71,"平"],"公孫瓚":[50,"平"],"趙雲":[94,"山"],"嚴綱":[48,"平"],"劉備":[99,"平"],"關羽":[88,"水"],"張飛":[35,"山"],"呂布":[10,"山"],"陳宮":[70,"平"],"高順":[60,"山"],"袁術":[40,"平"],"紀靈":[36,"水"],"張勳":[45,"平"],"孫策":[90,"水"],"周瑜":[96,"水"],"程普":[79,"平"],"黃蓋":[80,"水"],"太史慈":[76,"山"],"周泰":[60,"水"],"劉表":[80,"水"],"蔡瑁":[50,"水"],"黃祖":[45,"水"],"文聘":[65,"山"],"劉璋":[77,"平"],"嚴顏":[86,"山"],"張任":[90,"山"],"黃權":[68,"平"],"馬騰":[84,"山"],"馬超":[76,"山"],"韓遂":[78,"平"],"龐德":[78,"山"],"董卓":[11,"山"],"李傕":[24,"山"],"郭汜":[12,"水"],"賈詡":[65,"平"],"張魯":[85,"山"],"楊任":[55,"山"],"楊昂":[50,"山"],"孔融":[80,"平"],"武安國":[36,"山"],"諸葛亮":[95,"水"],"龐統":[73,"平"],"黃忠":[75,"山"],"魏延":[26,"山"],"甘寧":[79,"水"],"徐庶":[80,"山"],"陸遜":[83,"水"],"呂蒙":[91,"水"],"魯肅":[93,"平"],"張昭":[88,"平"],"法正":[82,"平"],"馬良":[88,"平"],"華雄":[43,"山"],"田豐":[89,"平"],"廖化":[41,"水"],"孫權":[95,"水"],"張角":[80,"平"],"張梁":[45,"平"],"張寶":[50,"平"],"皇甫嵩":[82,"山"],"朱儁":[78,"山"],"盧植":[84,"平"],"孫堅":[85,"水"],"韓當":[88,"水"],"祖茂":[60,"水"]};
+function genStats(g){const d=GD[g],lv=genLv(g);if(!d){const s=GEN[g]||[50,50,50];return {wu:s[0],zhi:s[1],tong:s[2],de:60,zhong:100,hp:80,lv:lv,exp:LVEXP[lv],arm:"平軍",weap:"無",armor:"無"};}return {wu:d[1],zhi:d[3],tong:d[2],de:d[5],zhong:d[4],hp:d[0],lv:lv,exp:LVEXP[lv],arm:d[6]+"軍",weap:d[7],armor:d[8]};}
+let genPage=0;
+function openCityGens(){if(selected==null)return;genPage=0;renderCityGens();$('gencards').style.display='flex';}
+function renderCityGens(){const s=state.cs[selected];const list=s.gens.slice();const per=10,pages=Math.max(1,Math.ceil(list.length/per));if(genPage>=pages)genPage=pages-1;if(genPage<0)genPage=0;const sl=list.slice(genPage*per,genPage*per+per);let html='';sl.forEach(g=>{const st=genStats(g);html+='<div class="gcard"><div class="gportrait">'+g.charAt(0)+'</div><div class="ginfo"><div class="gname">'+g+'　<small>Lv'+st.lv+'　exp'+st.exp+'</small></div><div class="gstats">體 '+st.hp+'　德 '+st.de+'　智 '+st.zhi+'　忠 '+st.zhong+'　武 '+st.wu+'</div><div class="gstats2">'+st.arm+' '+s.troops+'　⚔ '+st.weap+'　🛡 '+st.armor+'</div></div></div>';});$('gc-body').innerHTML=html||'<div style="text-align:center;padding:24px;color:#7a4a35">此城無武將</div>';$('gc-title').textContent=cityById(selected).name+' 武將（'+list.length+' 名）';$('gc-page').textContent=(genPage+1)+' / '+pages;}
+function gcPage(d){const n=state.cs[selected].gens.length;const pages=Math.max(1,Math.ceil(n/10));genPage=Math.max(0,Math.min(pages-1,genPage+d));renderCityGens();}
 function openGen(){$('setmenu').style.display='none';const tb=document.querySelector('#gt tbody');tb.innerHTML="";CITIES.forEach(c=>{const s=state.cs[c.id];if(s.owner!==state.player)return;s.gens.forEach(g=>{const tr=document.createElement('tr');tr.innerHTML="<td>"+g+"</td><td>"+c.name+"</td><td>"+GEN[g][0]+"</td><td>"+GEN[g][1]+"</td><td>"+GEN[g][2]+"</td>";tb.appendChild(tr);});(s.wild||[]).forEach(g=>{const tr=document.createElement('tr');tr.style.color="#8a5a3a";tr.innerHTML="<td>"+g+"·在野</td><td>"+c.name+"</td><td>"+GEN[g][0]+"</td><td>"+GEN[g][1]+"</td><td>"+GEN[g][2]+"</td>";tb.appendChild(tr);});});$('genlist').style.display='flex';}
 function openLog(){$('setmenu').style.display='none';$('info-title').textContent="戰　報";$('info-body').innerHTML=history.map(h=>'<div class="'+h.cls+'">'+h.msg+'</div>').join("")||"（無）";$('info').style.display='flex';}
-function openHelp(){$('setmenu').style.display='none';$('info-title').textContent="說　明";$('info-body').innerHTML='<div style="line-height:1.85;font-size:13px">點城池展開指令，按返回回地圖。每回合行動力（⚑）每指令耗1點，用盡按⏭進行。政廳：開墾/商業/治水/徵兵/訓練/登用。軍隊：出陣/移動。市集：買賣米。倉庫：輸送。登用：招攬城內在野武將（左欄「在野」顯示人數，需50金，成功率依太守智力；攻下他人城池後其在野武將仍可招攬）。設定→逐城定位 可重新對位；換戰鬥背景放 battle.png(700×320)。</div>';$('info').style.display='flex';}
+function openHelp(){$('setmenu').style.display='none';$('info-title').textContent="說　明";$('info-body').innerHTML='<div style="line-height:1.85;font-size:13px">點城池展開指令，按返回回地圖。每回合行動力（⚑）每指令耗1點，用盡按⏭進行。政廳：開墾/商業/治水/徵兵/訓練/登用。軍隊：出陣/移動。市集：買賣米。倉庫：輸送。登用：招攬城內在野武將（左欄「在野」顯示人數，需50金，成功率依太守智力；攻下他人城池後其在野武將仍可招攬）。</div>';$('info').style.display='flex';}
 function openAllGen(){$('setmenu2').style.display='none';$('info-title').textContent='武將一覽';let h='';CITIES.forEach(c=>{const s=state.cs[c.id];const all=s.gens.concat((s.wild||[]).map(g=>g+'(在野)'));if(all.length)h+='<div style="margin-bottom:3px"><b>'+c.name+'</b>（'+facName(s.owner)+'）：'+all.join('、')+'</div>';});$('info-body').innerHTML='<div style="font-size:12px;line-height:1.7">'+(h||'（無）')+'</div>';$('info').style.display='flex';}
 function openAllCity(){$('setmenu2').style.display='none';$('info-title').textContent='城池一覽';let h='<table class="gt"><thead><tr><th>城</th><th>勢力</th><th>兵</th><th>金</th><th>米</th></tr></thead><tbody>';CITIES.forEach(c=>{const s=state.cs[c.id];h+='<tr><td>'+c.name+'</td><td>'+facName(s.owner)+'</td><td>'+s.troops+'</td><td>'+s.gold+'</td><td>'+s.rice+'</td></tr>';});$('info-body').innerHTML=h+'</tbody></table>';$('info').style.display='flex';}
 function cheatTodo(n){$('setmenu2').style.display='none';$('info-title').textContent=n;$('info-body').innerHTML='<div style="font-size:14px;text-align:center;padding:24px 10px">（'+n+' 功能待實作）</div>';$('info').style.display='flex';}
@@ -452,15 +516,34 @@ function startNewGame(){$('mainmenu').style.display='none';$('scn-stage').style.
 function backToMenu(){$('setmenu2').style.display='none';if(confirm('回主畫面？未存檔的進度會遺失。'))location.reload();}
 function encodeSave(){return btoa(unescape(encodeURIComponent(JSON.stringify({sid:curScenario.id,state,history}))));}
 function autoSave(){try{localStorage.setItem('sg_save_v1',encodeSave());}catch(e){}}
-function saveGame(){$('setmenu2').style.display='none';if(!state){alert('還沒開始遊戲喔～先從主畫面「開始遊戲」。');return;}const code=encodeSave();let lsOk=true;try{localStorage.setItem('sg_save_v1',code);}catch(e){lsOk=false;}window._sc=code;$('sb-title').textContent='存　檔';$('sb-body').innerHTML='<div style="font-size:16px;text-align:center;font-weight:bold;margin:4px 0 12px;color:'+(lsOk?'#2f7a2f':'#b03a1e')+'">'+(lsOk?'✔ 已存檔！（'+state.year+'年 '+state.month+'月）':'⚠ 這個瀏覽器無法自動存檔')+'</div><div style="font-size:13px;line-height:1.9;color:#5a3526">'+(lsOk?'下次打開遊戲，按 ★ →「讀檔」→「讀取上次存檔」就能接著玩。':'請改用下面的「備份碼」保存進度。')+'<br><br>📱 <b>要換手機／電腦，或怕存檔不見？</b><br>按「複製備份碼」，把那串文字貼到記事本或傳訊息給自己存著；之後在「讀檔」貼回去就能還原。</div><textarea id="sb-code" readonly style="display:none;width:100%;height:20vh;font-size:11px;margin-top:8px" onclick="this.select()">'+code+'</textarea>';$('sb-btns').innerHTML='<button onclick="copySave()">複製備份碼</button><button onclick="$(\'savebox\').style.display=\'none\'">關閉</button>';$('savebox').style.display='flex';}
-function copySave(){const c=(window._sc)||'';let done=false;const t=$('sb-code');if(t){t.style.display='block';try{t.select();done=document.execCommand('copy');}catch(e){}}try{if(navigator.clipboard&&c){navigator.clipboard.writeText(c);done=true;}}catch(e){}alert(done?'✔ 已複製備份碼！貼到記事本或傳給自己保存即可。':'請長按／全選下方文字，手動複製保存。');}
-function loadGame(){$('setmenu2').style.display='none';let hasLS=false;try{hasLS=!!localStorage.getItem('sg_save_v1');}catch(e){}$('sb-title').textContent='讀　檔';$('sb-body').innerHTML='<div style="font-size:13px;line-height:1.9;color:#5a3526;margin-bottom:10px">'+(hasLS?'按下面綠色的「讀取上次存檔」就能繼續上次的進度。':'這個瀏覽器找不到自動存檔。')+'<br><br>📋 有<b>備份碼</b>嗎？把它貼進下面欄位，再按「用備份碼讀取」。</div><textarea id="sb-code" placeholder="（進階）在此貼上備份碼…" style="width:100%;height:18vh;font-size:11px"></textarea>';let b='';if(hasLS)b+='<button onclick="doLoad(0)" style="background:#bfe3b0;border-color:#2f7a2f">讀取上次存檔</button>';b+='<button onclick="doLoad(1)">用備份碼讀取</button><button onclick="$(\'savebox\').style.display=\'none\'">關閉</button>';$('sb-btns').innerHTML=b;$('savebox').style.display='flex';}
-function doLoad(fromCode){try{let code;if(fromCode){code=($('sb-code').value||'').trim();if(!code){alert('請先貼上存檔代碼。');return;}}else{code=localStorage.getItem('sg_save_v1');}let d;try{d=JSON.parse(decodeURIComponent(escape(atob(code))));}catch(e){d=JSON.parse(code);}if(!d||!d.state)throw new Error('格式不符');curScenario=SCENARIOS.find(s=>s.id===d.sid)||SCENARIOS[0];state=d.state;history=d.history||[];gameOver=false;selected=null;activeMenu=null;pendingAction=null;$('savebox').style.display='none';$('mainmenu').style.display='none';$('start').style.display='none';$('setmenu').style.display='none';$('setmenu2').style.display='none';exitCity();refreshAll();log('sys','讀檔完成，'+state.year+'年'+state.month+'月。');}catch(e){alert('讀檔失敗：存檔代碼無效。');}}
+function slotKey(i){return i===0?'sg_save_v1':'sg_slot_'+i;}
+function slotInfo(i){try{const raw=localStorage.getItem(slotKey(i));if(!raw)return null;let d;try{d=JSON.parse(decodeURIComponent(escape(atob(raw))));}catch(e){d=JSON.parse(raw);}return(d&&d.state)?d:null;}catch(e){return null;}}
+function scenName(sid){const s=SCENARIOS.find(x=>x.id===sid);return s?s.name:'';}
+function lordName(d){const s=SCENARIOS.find(x=>x.id===d.sid);const p=d.state.player;return(s&&s.names&&s.names[p])||(facOf(p)?facOf(p).name:p);}
+function doLoadData(d){curScenario=SCENARIOS.find(s=>s.id===d.sid)||SCENARIOS[0];state=d.state;history=d.history||[];gameOver=false;selected=null;activeMenu=null;pendingAction=null;$('savebox').style.display='none';$('mainmenu').style.display='none';$('start').style.display='none';$('setmenu').style.display='none';$('setmenu2').style.display='none';exitCity();refreshAll();log('sys','讀檔完成，'+state.year+'年'+state.month+'月。');playBgm();}
+function doLoad(i){const d=slotInfo(i);if(d)doLoadData(d);else alert('沒有存檔。');}
+function openSaveUI(mode){$('setmenu2').style.display='none';$('sb-title').textContent=mode==='save'?'存　檔':'讀　檔';let rows='';for(let i=0;i<=10;i++){const info=slotInfo(i);const name=i===0?'自動存檔':('存檔 '+i);const desc=info?(info.state.year+'年'+info.state.month+'月 ・ '+lordName(info)+' ・ '+scenName(info.sid)):'（空）';const dis=(mode==='save'&&i===0)||(mode==='load'&&!info);rows+='<div class="slotrow'+(dis?' dis':'')+'" data-i="'+i+'"><b>'+name+'</b><span>'+desc+'</span></div>';}$('sb-body').innerHTML='<div style="font-size:12px;color:#7a4a35;margin-bottom:8px">'+(mode==='save'?'點欄位存檔（自動存檔由系統管理，不可手動覆蓋）':'點有進度的欄位讀取')+'</div><div style="display:flex;flex-direction:column;gap:5px;max-height:50vh;overflow-y:auto">'+rows+'</div>';$('sb-body').querySelectorAll('.slotrow').forEach(el=>{if(el.classList.contains('dis'))return;el.onclick=()=>slotClick(mode,parseInt(el.dataset.i));});$('sb-btns').innerHTML='<button id="sb-x1">'+(mode==='save'?'複製備份碼':'貼備份碼讀取')+'</button><button id="sb-x2">關閉</button>';$('sb-x1').onclick=mode==='save'?exportCode:importCode;$('sb-x2').onclick=()=>{$('savebox').style.display='none';};$('savebox').style.display='flex';}
+function slotClick(mode,i){if(mode==='save'){if(!state){alert('尚未開始遊戲。');return;}if(i===0)return;const code=encodeSave();let ok=true;try{localStorage.setItem(slotKey(i),code);}catch(e){ok=false;}if(!ok){alert('此瀏覽器儲存被封鎖，請改用「複製備份碼」。');return;}alert('✔ 已存到 存檔 '+i+'（'+state.year+'年'+state.month+'月）');openSaveUI('save');}else{const info=slotInfo(i);if(info)doLoadData(info);}}
+function exportCode(){if(!state){alert('尚未開始遊戲。');return;}const c=encodeSave();let done=false;try{if(navigator.clipboard){navigator.clipboard.writeText(c);done=true;}}catch(e){}if(done)alert('✔ 已複製目前進度的備份碼！貼到記事本或傳給自己保存即可。');else prompt('複製此備份碼保存：',c);}
+function importCode(){const c=prompt('貼上備份碼：');if(!c)return;try{let d;try{d=JSON.parse(decodeURIComponent(escape(atob(c.trim()))));}catch(e){d=JSON.parse(c.trim());}if(!d||!d.state)throw 0;doLoadData(d);}catch(e){alert('備份碼無效。');}}
+function saveGame(){openSaveUI('save');}
+function loadGame(){openSaveUI('load');}
+const EDF=[['金','gold',0,9999,100],['米','rice',0,9999,100],['財寶','bao',0,999,10],['土地','land',0,999,10],['產業','ind',0,999,10],['人口','pop',0,999900,1000],['防災','flood',0,100,5],['統治','gov',0,100,5]];
+let edSnap=null;
+function editorButtons(on){var b2=$('btn-back2'),bg=$('btn-gen'),bk=$('btn-back'),bm=$('btn-edmax');if(on){b2.innerHTML='兵力';b2.classList.remove('end');b2.onclick=edTroops;bm.style.display='';bg.innerHTML='確定';bg.classList.add('end');bg.onclick=edConfirm;bk.onclick=edCancel;}else{b2.innerHTML='編輯';b2.classList.add('end');b2.onclick=openEditor;bm.style.display='none';bg.innerHTML='<div class="av">⚔</div>武將';bg.classList.remove('end');bg.onclick=openCityGens;bk.onclick=exitCity;}}
+function openEditor(){if(selected==null){alert('請先點選一座城池。');return;}edSnap=JSON.parse(JSON.stringify(state.cs[selected]));buildEditor();editorButtons(true);$('editor').style.display='block';}
+function buildEditor(){const c=state.cs[selected];let html='';EDF.forEach((f,i)=>{const v=c[f[1]]||0;html+='<div class="edrow"><span class="edlbl">'+f[0]+'</span><span class="edval" id="edv'+i+'" onclick="edInput('+i+')">'+v+'</span><button class="edbtn" data-i="'+i+'" data-d="-1">−</button><input type="range" class="edsl" id="eds'+i+'" min="'+f[2]+'" max="'+f[3]+'" value="'+Math.min(f[3],v)+'"><button class="edbtn" data-i="'+i+'" data-d="1">＋</button></div>';});$('ed-left').innerHTML=html;EDF.forEach((f,i)=>{$('eds'+i).oninput=function(){edSet(i,parseInt(this.value));};});$('ed-left').querySelectorAll('.edbtn').forEach(b=>{b.onclick=function(){const i=+b.dataset.i,d=+b.dataset.d;edSet(i,(state.cs[selected][EDF[i][1]]||0)+d*EDF[i][4]);};});}
+function edSet(i,val){const f=EDF[i];val=Math.max(f[2],Math.min(f[3],Math.round(val||0)));state.cs[selected][f[1]]=val;$('edv'+i).textContent=val;$('eds'+i).value=Math.min(f[3],val);}
+function edInput(i){const f=EDF[i];const v=prompt(f[0]+'（'+f[2]+'~'+f[3]+'）：',state.cs[selected][f[1]]||0);if(v!==null&&v!=='')edSet(i,parseInt(v));}
+function edMax(){EDF.forEach((f,i)=>edSet(i,f[3]));}
+function edTroops(){const c=state.cs[selected];const v=prompt('設定兵力：',c.troops);if(v!==null)c.troops=Math.max(0,parseInt(v)||0);}
+function edConfirm(){$('editor').style.display='none';editorButtons(false);refreshLeft();drawMap();}
+function edCancel(){if(edSnap)state.cs[selected]=edSnap;$('editor').style.display='none';editorButtons(false);refreshLeft();drawMap();}
 function fitStage(){$('stage').style.transform='scale('+Math.min(window.innerWidth/932,window.innerHeight/430)+')';}
 window.addEventListener('resize',fitStage);
 window.addEventListener('orientationchange',()=>setTimeout(fitStage,250));
 fitStage();
-(async()=>{mapImg=await tryLoadAsset(encodeURI('GPT修改圖/三國大地圖.jpg'));if(!mapImg)mapImg=await tryLoadAsset('map.png');battleImg=await tryLoadAsset('battle.png');if(state)drawMap();buildStart();try{if(localStorage.getItem('sg_save_v1'))$('mm-continue').style.display='block';}catch(e){}})();
+(async()=>{mapImg=await tryLoadAsset(encodeURI('GPT修改圖/三國大地圖.jpg'));if(!mapImg)mapImg=await tryLoadAsset('map.png');battleImg=await tryLoadAsset('battle.png');bgm=new Audio(encodeURI('音樂/大地圖.mp3'));bgm.loop=true;bgm.volume=0.55;if(state)drawMap();buildStart();try{if(localStorage.getItem('sg_save_v1'))$('mm-continue').style.display='block';}catch(e){}})();
 </script>
 </body>
 </html>
