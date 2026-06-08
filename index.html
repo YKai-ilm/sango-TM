@@ -84,6 +84,8 @@
   .mmbtn:active{background:var(--gold);}
   #start{background:#101935;}
   .gcard{display:flex;align-items:center;gap:12px;background:var(--pink2);border:2px solid var(--brown);border-radius:5px;padding:8px 12px;box-shadow:inset 0 0 0 2px var(--pink);}
+  .gcard.psel{outline:3px solid var(--gold);background:#fbe7c2;}
+  .pkchk{font-size:22px;color:#9c2b1e;flex:0 0 auto;width:24px;text-align:center;}
   .gportrait{width:50px;height:50px;flex:0 0 auto;background:var(--gold);border:2px solid var(--brown2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:bold;color:#5a3526;}
   .ginfo{flex:1;text-align:left;}
   .gname{font-size:18px;font-weight:bold;color:#9c2b1e;}
@@ -207,6 +209,11 @@
   </div>
   <div class="bbtns"><button onclick="$('shop').style.display='none'">關閉</button></div>
 </div></div>
+<div class="overlay" id="picker" style="display:none"><div class="modal" style="max-width:540px">
+  <h2 id="pk-title" style="letter-spacing:1px;font-size:18px">選擇武將</h2>
+  <div id="pk-body" style="max-height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:7px"></div>
+  <div class="bbtns"><button onclick="pkPageF(-1)">◀ 上頁</button><span id="pk-page" style="align-self:center;min-width:60px;text-align:center;font-weight:bold"></span><button onclick="pkPageF(1)">下頁 ▶</button><button class="end" onclick="pkConfirm()">確認</button><button onclick="$('picker').style.display='none'">取消</button></div>
+</div></div>
 <div class="overlay" id="gencards" style="display:none"><div class="modal" style="max-width:540px">
   <h2 id="gc-title" style="letter-spacing:2px;font-size:20px">城內武將</h2>
   <div id="gc-body" style="max-height:56vh;overflow-y:auto;display:flex;flex-direction:column;gap:7px"></div>
@@ -254,62 +261,87 @@ const FACTIONS=[
  {id:"lu",name:"張魯",flag:"張",color:"#b0a060",cities:[30],gens:["張魯","楊任","楊昂"]},
  {id:"kong",name:"孔融",flag:"孔",color:"#c45a8a",cities:[11],gens:["孔融","武安國"]},
  {id:"huang",name:"張角",flag:"黃",color:"#d4a017",cities:[],gens:["張角","張梁","張寶"]},
- {id:"han",name:"漢室",flag:"漢",color:"#a52a2a",cities:[],gens:["皇甫嵩","朱儁","盧植"]}];
+ {id:"han",name:"漢室",flag:"漢",color:"#a52a2a",cities:[],gens:["皇甫嵩","朱儁","盧植"]},
+ {id:"tao",name:"陶謙",flag:"陶",color:"#6a8a3a",cities:[20],gens:["陶謙","曹豹","孫乾","糜竺"]},
+ {id:"hanf",name:"韓馥",flag:"韓",color:"#8a6a9a",cities:[8],gens:["韓馥","田豐","沮授","審配"]},
+ {id:"xiu",name:"張繡",flag:"繡",color:"#b07a3a",cities:[36],gens:["張繡","賈詡","胡車兒"]},
+ {id:"gsd",name:"公孫康",flag:"康",color:"#3a8a7a",cities:[71],gens:["公孫度","公孫康"]}];
 const WILD=[["諸葛亮",37],["龐統",38],["黃忠",41],["魏延",36],["甘寧",39],["徐庶",36],["陸遜",50],["呂蒙",45],["魯肅",44],["張昭",49],["法正",32],["馬良",38],["華雄",22],["田豐",8],["廖化",40]];
 const SCENARIOS=[
  {id:"s184",name:"黃巾崛起",sub:"184年・蒼天已死，黃天當立",year:184,month:3,names:{sun:"孫堅"},
   setup:{
-   huang:{cities:[8,10,7,9,17,15,12,11],gens:["張角","張梁","張寶"]},
-   han:{cities:[22,23,14,16,13],gens:["皇甫嵩","朱儁","盧植"]},
-   cao:{cities:[18],gens:["曹操","夏侯惇","夏侯淵","曹仁","樂進"]},
-   liu:{cities:[1],gens:["劉備","關羽","張飛"]},
-   gsz:{cities:[2,3],gens:["公孫瓚","趙雲","嚴綱"]},
+   huang:{cities:[10,9,17,15],gens:["張角","張梁","張寶"]},
+   han:{cities:[22,16,64,23],gens:["皇甫嵩","朱儁","盧植"]},
+   dong:{cities:[24,58,65],gens:["董卓","李儒","華雄","李傕","郭汜"]},
+   cao:{cities:[18],gens:["曹操","夏侯惇","夏侯淵"]},
+   liu:{cities:[60],gens:["劉備","關羽","張飛"]},
+   gsz:{cities:[2,3],gens:["公孫瓚","嚴綱"]},
    sun:{cities:[50,49],gens:["孫堅","程普","黃蓋","韓當","祖茂"]},
-   dong:{cities:[24,26,28],gens:["董卓","李傕","郭汜","華雄","賈詡"]},
-   ma:{cities:[27,29,25],gens:["馬騰","韓遂"]}},
-  wild:[["黃忠",41],["甘寧",39],["徐晃",22],["龐德",27]]},
+   ma:{cities:[27,28],gens:["馬騰","韓遂"]}},
+  wild:[["呂布",5]]},
  {id:"s189",name:"董卓廢帝",sub:"189年・董卓入京，廢立天子",year:189,month:9,names:{sun:"孫堅"},
   setup:{
-   dong:{cities:[22,23,24,5,6,4,26,28],gens:["董卓","李傕","郭汜","華雄","賈詡","呂布","張遼"]},
-   yuan:{cities:[7,8,10],gens:["袁紹","顏良","文醜","審配","沮授","張郃"]},
+   dong:{cities:[22,23,24,64,5,6,70],gens:["董卓","李儒","呂布","李傕","郭汜","華雄","賈詡","徐榮"]},
+   yuan:{cities:[7],gens:["袁紹","顏良","文醜","高幹"]},
+   yshu:{cities:[44,45],gens:["袁術"]},
+   cao:{cities:[14,18],gens:["曹操","夏侯惇","夏侯淵","曹仁","曹洪","樂進","于禁","李典","荀彧"]},
+   sun:{cities:[41],gens:["孫堅","程普","黃蓋","韓當","祖茂","太史慈"]},
+   gsz:{cities:[2,1,3],gens:["公孫瓚","嚴綱"]},
    liu:{cities:[9],gens:["劉備","關羽","張飛"]},
-   cao:{cities:[14],gens:["曹操","夏侯惇","夏侯淵","曹仁","樂進","于禁"]},
-   sun:{cities:[41],gens:["孫堅","程普","黃蓋","韓當","祖茂"]},
-   gsz:{cities:[1,2,3],gens:["公孫瓚","趙雲","嚴綱"]},
-   biao:{cities:[37,36],gens:["劉表","蔡瑁","黃祖","文聘"]},
-   yshu:{cities:[44],gens:["袁術","紀靈","張勳"]},
-   kong:{cities:[11],gens:["孔融","武安國"]},
-   zhang:{cities:[32,31],gens:["劉璋","嚴顏","張任","黃權"]},
-   ma:{cities:[27,29],gens:["馬騰","韓遂"]}},
-  wild:[["黃忠",37],["魏延",36],["甘寧",39],["太史慈",12]]},
- {id:"s190",name:"群雄割據",sub:"190年・反董卓聯盟，十三路諸侯逐鹿",year:190,month:1,setup:null,wild:null},
- {id:"s200",name:"官渡之戰",sub:"200年・曹操袁紹爭霸中原",year:200,month:2,
+   tao:{cities:[20,19,21],gens:["陶謙","孫乾","糜竺","曹豹"]},
+   kong:{cities:[11],gens:["孔融"]},
+   hanf:{cities:[8,10],gens:["韓馥","田豐","沮授","審配"]},
+   ma:{cities:[27,28,26],gens:["馬騰","韓遂"]},
+   biao:{cities:[37,36],gens:["劉表","蔡瑁","黃祖"]}},
+  wild:[]},
+ {id:"s190",name:"群雄割據",sub:"190年・反董卓聯盟，十三路諸侯逐鹿",year:190,month:1,names:{sun:"孫堅",zhang:"劉焉"},
   setup:{
-   cao:{cities:[16,14,13,15,18,22,23,24,19,20],gens:["曹操","夏侯惇","夏侯淵","曹仁","荀彧","于禁","樂進","徐晃","張遼"]},
-   yuan:{cities:[8,7,9,10,11,12,5,6,4,1,2,3],gens:["袁紹","顏良","文醜","張郃","審配","沮授","田豐"]},
-   liu:{cities:[17],gens:["劉備","關羽","張飛","趙雲"]},
-   sun:{cities:[50,49,51,45,47,46],gens:["孫策","周瑜","程普","黃蓋","太史慈","周泰","魯肅","張昭"]},
-   biao:{cities:[37,36,38,39,41,40,42,43],gens:["劉表","蔡瑁","黃祖","文聘","黃忠","甘寧","魏延"]},
-   zhang:{cities:[32,31,33,34,35],gens:["劉璋","嚴顏","張任","黃權","法正"]},
-   ma:{cities:[26,27,28,25,29],gens:["馬騰","馬超","韓遂","龐德"]},
-   lu:{cities:[30],gens:["張魯","楊任","楊昂"]}},
-  wild:[["諸葛亮",37],["龐統",38],["徐庶",36],["馬良",38],["廖化",40],["呂蒙",45],["陸遜",50]]},
- {id:"s208",name:"赤壁之戰",sub:"208年・曹操南下，孫劉聯軍抗曹",year:208,month:7,names:{sun:"孫權"},
+   dong:{cities:[22,23,24,64,5,6,70],gens:["董卓","李儒","呂布","李傕","郭汜","華雄","賈詡","徐榮"]},
+   yuan:{cities:[7],gens:["袁紹","顏良","文醜","高幹"]},
+   yshu:{cities:[44,45],gens:["袁術"]},
+   cao:{cities:[14,18],gens:["曹操","夏侯惇","夏侯淵","曹仁","曹洪","樂進","于禁","李典","荀彧"]},
+   sun:{cities:[41],gens:["孫堅","程普","黃蓋","韓當","祖茂","太史慈"]},
+   gsz:{cities:[2,1,3,60],gens:["公孫瓚","嚴綱"]},
+   liu:{cities:[9],gens:["劉備","關羽","張飛"]},
+   tao:{cities:[20,19,21],gens:["陶謙","孫乾","糜竺","曹豹"]},
+   kong:{cities:[11],gens:["孔融"]},
+   hanf:{cities:[8,10],gens:["韓馥","田豐","沮授","審配"]},
+   biao:{cities:[37,36,38],gens:["劉表","蔡瑁","黃祖"]},
+   ma:{cities:[27,28,26],gens:["馬騰","韓遂"]},
+   zhang:{cities:[32,30,31,33,57,68,69],gens:["劉焉","張任","嚴顏","黃權"]},
+   gsd:{cities:[71],gens:["公孫度","公孫康"]}},
+  wild:[]},
+ {id:"s200",name:"官渡之戰",sub:"200年・曹操袁紹爭霸中原",year:200,month:2,names:{sun:"孫權"},
   setup:{
-   cao:{cities:[8,16,14,13,15,18,17,19,20,21,22,23,24,7,9,10,11,12,5,6,4,1,2,3,36,37,38],gens:["曹操","夏侯惇","夏侯淵","曹仁","荀彧","于禁","樂進","徐晃","張遼","張郃","賈詡","蔡瑁","文聘"]},
-   sun:{cities:[50,49,51,45,47,46,44,48],gens:["孫權","周瑜","程普","黃蓋","太史慈","周泰","魯肅","呂蒙","陸遜","張昭","甘寧"]},
-   liu:{cities:[39,40],gens:["劉備","關羽","張飛","趙雲","諸葛亮","黃忠","魏延"]},
-   ma:{cities:[26,27,28,25,29],gens:["馬騰","馬超","韓遂","龐德"]},
-   zhang:{cities:[32,31,33,34,35],gens:["劉璋","嚴顏","張任","黃權","法正"]},
-   lu:{cities:[30],gens:["張魯","楊任","楊昂"]}},
-  wild:[["龐統",38],["徐庶",16],["馬良",39],["廖化",40]]},
+   cao:{cities:[16,14,13,15,18,22,23,64,63,70],gens:["曹操","夏侯惇","夏侯淵","曹仁","曹洪","樂進","于禁","李典","荀彧","荀攸","郭嘉","程昱","許褚","徐晃","張遼"]},
+   yuan:{cities:[8,7,9,10,1,2,3,60,5,6,11,12,66],gens:["袁紹","顏良","文醜","審配","沮授","田豐","郭圖","逢紀","許攸","淳於瓊","高幹"]},
+   liu:{cities:[17],gens:["劉備","關羽","張飛","趙雲","孫乾","糜竺","簡雍","徐庶","周倉"]},
+   sun:{cities:[49,50,51,46,47,45,48,44],gens:["孫權","周瑜","程普","黃蓋","韓當","太史慈","魯肅","呂蒙"]},
+   biao:{cities:[37,38,39,40,41,42,43,74,61],gens:["劉表","蔡瑁","黃祖","文聘"]},
+   zhang:{cities:[32,31,33,34,35,57,68,69,54,62],gens:["劉璋","張任","嚴顏","黃權","法正","李嚴","張松","孟達"]},
+   lu:{cities:[30],gens:["張魯","楊任","楊昂","閻圃"]},
+   ma:{cities:[26,27,28,29,58,59,65,72,73],gens:["馬騰","馬超","韓遂","龐德","馬岱"]},
+   xiu:{cities:[36],gens:["張繡","賈詡","胡車兒"]},
+   gsd:{cities:[71],gens:["公孫度","公孫康"]}},
+  wild:[]},
+ {id:"s208",name:"赤壁之戰",sub:"208年・曹操南下，孫劉聯軍抗曹",year:208,month:7,names:{sun:"孫權",ma:"馬超"},
+  setup:{
+   cao:{cities:[16,14,13,15,18,22,23,24,64,63,70,8,7,9,10,1,2,3,60,5,6,11,12,66,17,37,36],gens:["曹操","夏侯惇","夏侯淵","曹仁","曹洪","樂進","于禁","李典","荀彧","荀攸","程昱","許褚","徐晃","張遼","張郃","賈詡","文聘","劉曄","曹休"]},
+   sun:{cities:[49,50,51,46,47,45,48,44,39],gens:["孫權","周瑜","魯肅","呂蒙","程普","黃蓋","韓當","甘寧","凌統","諸葛瑾"]},
+   liu:{cities:[38,40,41,42,43,74,61],gens:["劉備","關羽","張飛","趙雲","諸葛亮","黃忠","魏延","馬良","孫乾","簡雍","糜竺","周倉","徐庶"]},
+   zhang:{cities:[32,31,33,34,35,57,68,69,54,62],gens:["劉璋","張任","嚴顏","黃權","法正","李嚴","張松","孟達"]},
+   lu:{cities:[30],gens:["張魯","楊任","楊昂","閻圃"]},
+   ma:{cities:[26,27,28,29,58,59,65,72,73],gens:["馬超","龐德","馬岱","韓遂","成宜","梁興","侯選","馬休","馬鐵"]},
+   gsd:{cities:[71],gens:["公孫康"]}},
+  wild:[]},
  {id:"s214",name:"三國初分",sub:"214年・劉備入蜀，魏蜀吳鼎立漸成",year:214,month:5,names:{sun:"孫權"},
   setup:{
-   cao:{cities:[8,16,14,13,15,18,17,19,20,21,22,23,24,7,9,10,11,12,5,6,4,1,2,3,36,37,25,26,27,28,29],gens:["曹操","夏侯惇","夏侯淵","曹仁","荀彧","于禁","樂進","徐晃","張遼","張郃","賈詡","徐庶"]},
-   liu:{cities:[32,31,33,34,35,38,40,41,42,43],gens:["劉備","關羽","張飛","趙雲","諸葛亮","馬超","黃忠","魏延","法正"],gov:58},
-   sun:{cities:[50,49,51,45,47,46,44,48,39],gens:["孫權","魯肅","呂蒙","陸遜","程普","黃蓋","甘寧","張昭","周泰","韓當"]},
-   lu:{cities:[30],gens:["張魯","楊任","楊昂"]}},
-  wild:[["廖化",43],["馬良",40]]}];
+   cao:{cities:[16,14,13,15,18,22,23,24,64,63,70,8,7,9,10,1,2,3,60,5,6,11,12,66,17,37,36,26,27,28,29,58,59,65,72,73],gens:["曹操","夏侯惇","夏侯淵","曹仁","曹洪","樂進","于禁","李典","荀攸","許褚","徐晃","張遼","張郃","賈詡","文聘","劉曄","曹休","曹丕"]},
+   liu:{cities:[32,31,33,34,35,57,68,69,54,62,38,40,41,42,43,74,61],gens:["劉備","關羽","張飛","趙雲","馬超","黃忠","魏延","諸葛亮","法正","孫乾","簡雍","糜竺","馬良","黃權","李嚴","嚴顏","周倉","馬岱"],gov:60},
+   sun:{cities:[49,50,51,46,47,45,48,44,39],gens:["孫權","魯肅","呂蒙","陸遜","甘寧","程普","韓當","周泰","凌統","諸葛瑾"]},
+   lu:{cities:[30],gens:["張魯","楊任","楊昂","閻圃","龐德"]},
+   gsd:{cities:[71],gens:["公孫康"]}},
+  wild:[]}];
 let curScenario=SCENARIOS[0];
 const BUFW=1000,BUFH=562,ZF=0.7,POS_KEY='sgmap_pos_v1';
 const PD=[[629,71],[728,51],[662,83],[568,58],[504,129],[513,223],[662,104],[582,159],[664,137],[582,122],[710,151],[682,165],[590,205],[566,217],[631,202],[583,240],[589,271],[659,238],[683,214],[755,204],[837,268],[516,251],[434,241],[391,234],[421,142],[202,151],[176,169],[87,88],[288,116],[390,291],[281,305],[166,345],[251,367],[365,333],[237,448],[545,273],[512,292],[476,330],[651,343],[523,393],[565,376],[531,434],[595,448],[721,267],[663,371],[721,339],[699,390],[648,427],[779,280],[864,318],[793,361],[436,407],[596,503],[133,488],[463,516],[782,451],[378,391],[295,205],[319,232],[540,163],[434,304],[462,276],[621,156],[547,239],[207,208],[760,170],[899,466],[236,233],[271,250],[508,188],[804,70],[548,84],[237,150],[565,408],[556,511],[176,480]];
@@ -318,7 +350,7 @@ function loadPos(){try{const s=JSON.parse(localStorage.getItem(POS_KEY));if(s)Ob
 function savePos(){try{localStorage.setItem(POS_KEY,JSON.stringify(POS));}catch(e){}}
 loadPos();
 let state=null,selected=null,activeMenu=null,pendingAction=null,gameOver=false;
-let mapImg=null,battleImg=null,history=[],editMode=false,dragId=null,guided=false,guidedIdx=0,hideFlags=false,testUnlocked=false,bgm=null,bgm2=null,GS={},zoom=1,zx=0,zy=0,zsel=false,zselX=0,zselY=0,zdrag=false,zJust=false,zpan=false,zpx0=0,zpy0=0,zx0=0,zy0=0,zmoved=false,animT=0,animRAF=null,menuPath=[];
+let mapImg=null,battleImg=null,history=[],editMode=false,dragId=null,guided=false,guidedIdx=0,hideFlags=false,testUnlocked=false,bgm=null,bgm2=null,GS={},zoom=1,zx=0,zy=0,zsel=false,zselX=0,zselY=0,zdrag=false,zJust=false,zpan=false,zpx0=0,zpy0=0,zx0=0,zy0=0,zmoved=false,animT=0,animRAF=null,menuPath=[],actedMonth=[],capturedMonth=[],pkSel=[],pkMode="single",pkMax=99,pkCb=null,pkPage=0,pkTitle="";
 function tryLoadAsset(src){return new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src;});}
 const rnd=n=>Math.floor(Math.random()*n);
 const facOf=id=>FACTIONS.find(f=>f.id===id);
@@ -331,15 +363,34 @@ function topGen(cid){const g=state.cs[cid].gens;if(!g.length)return null;return 
 function recalcAp(){state.maxAp=Math.min(12,3+playerCities().length);state.ap=state.maxAp;}
 const FGOV={cao:82,yuan:85,gsz:68,liu:78,lvbu:52,yshu:55,sun:70,biao:85,zhang:72,ma:66,dong:50,lu:88,kong:72,huang:60,han:88};
 function ownCityBoost(c){c.gov=100;c.land=120+rnd(40);c.ind=110+rnd(40);c.pop=22000+rnd(8000);c.flood=85+rnd(14);c.gold=100+rnd(80);c.rice=350+rnd(200);c.troops=2000+rnd(2000);}
+const APPEAR=[[189,25,"任雙",80,65,89,50,61,58,"山","矛","籠手"],[189,72,"楊阜",56,40,72,75,62,33,"平","短劍","綸巾"],[189,22,"侯成",70,72,90,52,64,60,"山","矛","籠手"],[189,24,"宋憲",80,60,85,48,56,52,"平","矛","籠手"],[189,8,"高幹",69,60,87,38,70,42,"水","矛","籠手"],[189,1,"陳震",54,53,83,78,65,67,"平","短劍","綸巾"],[189,12,"張南",79,61,85,46,69,30,"水","薤刀","籠手"],[189,20,"孫乾",51,46,76,74,71,92,"平","短劍","綸巾"],[189,13,"荀彧",59,34,62,96,92,74,"平","短劍","綸巾"],[189,16,"李典",72,60,85,64,78,72,"平","矛","兜"],[189,39,"呂範",70,23,63,80,81,65,"平","短劍","綸巾"],[189,44,"賈華",79,65,89,58,75,42,"平","飛劍","籠手"],[189,49,"盧翻",51,40,76,79,69,71,"平","短劍","綸巾"],[189,56,"嚴畯",50,21,61,74,73,48,"平","短劍","綸巾"],[189,36,"陳蘭",84,68,89,49,54,30,"水","薤刀","兜"],[189,37,"伊籍",60,33,71,84,71,87,"平","短劍","綸巾"],[189,41,"韓玄",50,41,77,21,58,20,"平","短劍","綸巾"],[189,42,"劉度",53,51,83,36,58,47,"平","矛","籠手"],[189,74,"呂曠",73,65,89,40,63,18,"平","薤刀","籠手"],[189,75,"媯覽",96,52,80,8,49,10,"平","雙戟","綸巾"],[189,32,"董允",37,38,71,86,85,79,"平","短劍","綸巾"],[189,30,"閻圃",53,32,71,78,77,74,"平","短劍","綸巾"],[189,54,"呂凱",46,37,75,87,68,83,"平","短劍","綸巾"],[190,72,"田疇",71,51,83,54,74,77,"平","飛劍","籠手"],[190,5,"簡雍",70,34,72,74,68,84,"平","短劍","綸巾"],[190,22,"胡車兒",94,74,90,50,58,43,"山","薤刀","籠手"],[190,24,"史渙",80,65,87,38,53,42,"水","眉尖刀","籠手"],[190,71,"公孫康",79,64,86,62,63,69,"水","短劍","籠手"],[190,8,"許攸",47,34,67,91,68,43,"平","短劍","綸巾"],[190,1,"趙雲",98,97,97,86,77,94,"山","單鉤鎗","兜"],[190,12,"武安國",87,80,90,21,65,36,"山","雙戟","籠手"],[190,20,"糜竺",61,40,76,73,77,80,"平","飛劍","籠手"],[190,13,"程昱",40,22,57,92,89,70,"平","飛劍","綸巾"],[190,16,"典韋",97,96,96,26,93,39,"山","雙戟","兜"],[190,39,"甘寧",94,93,93,60,84,79,"水","眉尖刀","籠手"],[190,44,"朱然",90,77,91,40,70,60,"水","薤刀","籠手"],[190,49,"陸績",44,32,66,64,69,66,"平","短劍","綸巾"],[190,55,"譚雄",78,76,90,45,60,53,"山","薤刀","籠手"],[190,36,"蒯越",59,41,73,84,64,58,"平","短劍","綸巾"],[190,37,"周倉",91,84,90,61,67,59,"水","三尖刀","兜"],[190,42,"刑道榮",87,80,90,13,65,41,"山","戰斧","籠手"],[190,74,"文聘",89,81,91,53,67,65,"山","眉尖刀","籠手"],[190,32,"王累",64,42,78,77,89,84,"平","飛劍","綸巾"],[190,30,"張衛",57,61,85,49,69,53,"山","矛","籠手"],[190,57,"尚寵",69,70,89,55,75,80,"平","矛","籠手"],[190,54,"高定",63,51,79,56,66,58,"平","薤刀","籠手"],[190,76,"董茶奴",70,63,85,49,67,50,"平","雙戟","籠手"],[191,28,"龐柔",79,63,87,47,63,70,"水","薤刀","籠手"],[191,25,"郝昭",81,76,90,74,83,75,"山","矛","兜"],[191,72,"李孚",56,33,61,69,66,49,"平","短劍","綸巾"],[191,22,"蔡陽",70,62,86,47,49,38,"水","薤刀","籠手"],[191,24,"雷薄",84,74,90,49,59,30,"山","薤刀","籠手"],[191,8,"張郃",83,89,91,43,67,56,"山","眉尖刀","兜"],[191,1,"韓猛",75,58,83,21,61,36,"水","矛","籠手"],[191,12,"淳於瓊",84,69,88,16,65,27,"水","飛劍","籠手"],[191,20,"糜芳",76,55,83,47,68,63,"平","矛","兜"],[191,13,"徐晃",93,91,91,50,88,47,"山","戰斧","兜"],[191,16,"許褚",95,97,97,35,88,60,"山","單鉤鎗","籠手"],[191,44,"周泰",87,82,90,33,78,60,"水","矛","籠手"],[191,49,"薛綜",55,37,70,64,68,44,"平","短劍","綸巾"],[191,56,"程乘",41,36,69,52,71,65,"平","短劍","綸巾"],[191,36,"蒯良",64,38,71,89,70,79,"平","短劍","綸巾"],[191,74,"李珪",38,36,74,52,70,87,"平","短劍","綸巾"],[191,75,"周魴",72,54,82,79,74,70,"平","短劍","籠手"],[191,32,"楊洪",83,37,70,69,60,61,"平","短劍","綸巾"],[191,30,"申耽",81,72,90,40,64,43,"水","雙戟","兜"],[191,54,"雍闓",79,68,87,37,65,40,"山","三尖刀","籠手"],[192,39,"周瑜",70,87,91,98,98,96,"水","破斬劍","硬皮"],[192,73,"馬玩",73,60,85,47,65,55,"平","薤刀","籠手"],[192,72,"崔琰",44,42,69,74,60,59,"平","短劍","綸巾"],[192,24,"呂虔",80,63,85,57,61,63,"山","矛","籠手"],[192,22,"任峻",60,35,73,39,60,64,"平","飛劍","籠手"],[192,8,"辛毘",67,35,68,86,79,83,"平","短劍","綸巾"],[192,1,"嚴綱",60,55,83,51,67,48,"平","飛劍","籠手"],[192,12,"馬延",80,58,83,32,68,23,"水","矛","籠手"],[192,13,"郭嘉",49,36,64,97,90,81,"平","短劍","綸巾"],[192,16,"牛金",84,80,90,36,70,40,"山","三尖刀","兜"],[192,39,"蘇飛",77,60,87,55,67,61,"平","雙戟","籠手"],[192,44,"華歆",63,27,66,85,64,80,"平","短劍","綸巾"],[192,49,"朱桓",88,84,90,70,73,69,"水","雙戟","兜"],[192,56,"藩璋",85,78,90,52,75,54,"水","薤刀","籠手"],[192,55,"留平",70,57,84,47,59,63,"平","飛劍","籠手"],[192,37,"徐庶",73,74,90,96,67,80,"山","長劍","綸巾"],[192,41,"魏延",95,94,94,42,55,26,"山","眉尖刀","兜"],[192,54,"鄂煥",89,85,91,20,68,32,"山","方天畫戟","籠手"],[193,28,"馬超",97,97,97,52,99,76,"山","戰斧","硬皮"],[193,28,"龐德",95,94,94,60,79,78,"山","鳳嘴刀","硬皮"],[193,73,"李湛",84,63,85,12,70,47,"水","矛","籠手"],[193,25,"韓德",90,77,91,45,71,51,"山","戰斧","兜"],[193,5,"廖化",81,72,90,54,67,41,"水","眉尖刀","兜"],[193,24,"紀靈",80,70,89,31,57,36,"水","三尖刀","兜"],[193,8,"辛評",65,54,82,60,83,67,"平","飛劍","綸巾"],[193,12,"尹楷",70,54,82,39,75,48,"平","矛","籠手"],[193,13,"韋康",57,40,72,43,57,68,"平","短劍","綸巾"],[193,16,"張遼",92,90,90,84,90,90,"水","單鉤鎗","硬皮"],[193,39,"徐盛",83,74,90,55,76,70,"水","單鉤鎗","兜"],[193,44,"魯肅",40,39,66,95,89,93,"平","飛劍","綸巾"],[193,49,"萬彧",37,48,82,83,77,72,"平","飛劍","綸巾"],[193,56,"李異",82,70,89,33,76,38,"山","戰斧","兜"],[193,36,"王平",84,71,89,48,67,74,"水","單鉤鎗","籠手"],[193,41,"黃忠",90,96,96,64,78,75,"山","鉤鐮刀","兜"],[193,74,"王粲",59,34,67,82,63,70,"平","短劍","綸巾"],[193,75,"朱靈",82,63,85,42,62,59,"水","矛","籠手"],[193,32,"李嚴",87,82,90,75,68,81,"山","鉤鐮刀","兜"],[193,30,"尹賞",73,62,88,38,64,70,"平","飛劍","綸巾"],[193,57,"張翼",81,67,88,65,75,55,"平","雙戟","籠手"],[193,54,"張嶷",75,77,91,56,70,69,"山","雙戟","兜"],[194,28,"馬岱",90,88,90,63,89,52,"山","眉尖刀","硬皮"],[194,73,"梁興",82,65,87,28,65,47,"山","矛","籠手"],[194,25,"韓瑛",77,70,89,41,63,42,"水","飛劍","籠手"],[194,8,"呂翔",81,50,79,36,69,27,"平","雙戟","兜"],[194,12,"荀諶",51,30,64,72,76,49,"平","短劍","綸巾"],[194,13,"蔣幹",58,42,74,74,69,39,"平","飛劍","籠手"],[194,16,"司馬懿",69,64,84,98,90,90,"平","長劍","綸巾"],[194,39,"全琮",74,63,85,56,65,49,"平","薤刀","籠手"],[194,44,"諸葛瑾",54,48,74,94,93,94,"平","短劍","綸巾"],[194,49,"董襲",89,68,87,50,72,52,"水","三尖刀","籠手"],[194,56,"傅嬰",69,58,83,51,71,65,"平","單鉤鎗","籠手"],[194,37,"諸葛亮",71,62,84,99,97,95,"水","長劍","鶴氅"],[194,57,"費禕",54,18,54,85,61,84,"平","短劍","綸巾"],[194,54,"金環結",70,62,86,38,58,40,"平","單鉤鎗","籠手"],[194,76,"孟獲",88,87,91,29,53,71,"山","鉤鐮刀","硬皮"],[195,28,"馬鐵",81,67,88,39,88,63,"平","飛劍","兜"],[195,25,"韓琪",82,64,86,22,67,50,"水","雙戟","綸巾"],[195,24,"王忠",68,36,74,38,62,41,"平","薤刀","籠手"],[195,8,"陳琳",72,45,71,82,60,61,"平","短劍","綸巾"],[195,30,"馬遵",88,51,79,22,74,70,"平","眉尖刀","兜"],[196,13,"夏侯楙",67,44,71,14,71,53,"平","長劍","籠手"],[196,22,"楊修",60,50,75,93,73,82,"平","短劍","綸巾"],[196,12,"義渠",85,58,81,37,73,42,"水","雙戟","籠手"],[196,39,"龐統",68,39,66,98,55,73,"平","飛劍","綸巾"],[196,44,"顧雍",52,46,76,83,73,71,"平","短劍","綸巾"],[196,36,"鄧芝",69,45,71,84,70,80,"平","短劍","兜"],[196,37,"馬良",45,45,75,94,73,88,"平","短劍","綸巾"],[196,74,"馬謖",76,80,90,89,72,74,"山","長劍","籠手"],[196,32,"楊儀",47,47,73,79,77,60,"平","短劍","綸巾"],[196,57,"高翔",80,62,86,55,68,59,"平","雙戟","兜"],[196,54,"朱褒",70,57,80,67,65,52,"平","三尖刀","兜"],[196,76,"孟優",78,69,86,40,61,65,"平","雙戟","兜"],[197,28,"馬休",70,62,86,40,85,63,"平","雙戟","硬皮"],[197,39,"孫權",82,83,91,88,99,95,"水","破斬劍","硬皮"],[197,25,"崔諒",69,58,81,34,61,65,"平","飛劍","籠手"],[198,36,"關平",88,82,90,60,85,70,"水","薤刀","兜"],[198,28,"越吉",88,81,91,21,66,56,"山","三尖刀","兜"],[198,16,"劉曄",42,37,65,91,71,93,"平","飛劍","籠手"],[198,44,"凌統",90,86,90,53,80,62,"水","眉尖刀","兜"],[198,49,"呂蒙",75,87,91,93,85,91,"水","長劍","硬皮"],[198,57,"蔣琬",53,44,71,90,71,86,"平","短劍","綸巾"],[198,54,"阿會喃",71,64,84,24,68,52,"山","雙戟","兜"],[198,76,"兀突骨",98,80,90,26,51,50,"水","雙戟","硬皮"],[199,36,"劉封",84,73,87,55,83,69,"水","單鉤鎗","兜"],[199,39,"孫翊",90,84,90,26,88,55,"山","三尖刀","兜"],[199,28,"雅丹",79,75,89,68,57,61,"水","雙戟","兜"],[200,13,"曹真",85,70,89,74,86,80,"山","雙戟","兜"],[200,22,"王雙",90,89,91,13,81,38,"山","鉤鐮刀","綸巾"],[200,13,"郭淮",71,64,84,86,86,70,"水","薤刀","兜"],[200,16,"孫禮",88,87,91,58,73,60,"山","眉尖刀","籠手"],[200,44,"陸遜",65,77,87,97,88,83,"水","長劍","硬皮"],[200,49,"步騭",40,39,71,80,82,53,"平","短劍","綸巾"],[201,13,"曹休",91,72,88,42,84,63,"水","矛","兜"],[202,13,"曹丕",80,77,89,79,92,88,"山","長劍","硬皮"],[203,36,"張苞",92,90,90,55,87,52,"山","單鉤鎗","兜"],[203,13,"曹彰",94,88,90,44,85,31,"山","單鉤鎗","硬皮"],[203,13,"夏侯蘭",83,57,80,36,75,50,"平","矛","籠手"],[204,36,"關興",92,88,90,68,87,66,"山","眉尖刀","兜"],[204,13,"曹植",37,41,73,91,83,68,"平","短劍","綸巾"],[205,36,"關索",94,83,91,58,85,60,"山","三尖刀","籠手"],[205,13,"曹熊",30,34,72,32,80,79,"平","短劍","綸巾"],[208,13,"夏侯霸",94,86,90,60,84,66,"山","眉尖刀","兜"],[208,13,"司馬師",84,85,91,89,83,80,"山","雙戟","籠手"],[208,24,"鄧艾",89,87,91,90,78,68,"山","鉤鐮刀","硬皮"],[208,71,"王建",42,24,54,75,59,41,"平","飛劍","綸巾"],[209,13,"司馬昭",76,71,85,90,80,89,"水","單鉤鎗","硬皮"],[209,25,"姜維",80,92,92,94,75,75,"山","雙鉤鎗","甲冑"],[209,24,"鍾會",80,70,85,92,80,74,"水","鉤鐮刀","硬皮"],[209,71,"賈範",70,33,56,64,71,77,"平","短劍","綸巾"],[210,36,"諸葛瞻",77,86,90,87,85,90,"山","長劍","兜"],[210,13,"曹叡",73,79,89,84,89,60,"山","長劍","硬皮"],[210,39,"諸葛恪",61,71,85,95,81,81,"水","單鉤鎗","籠手"],[210,71,"公孫淵",87,76,90,20,48,10,"山","三尖刀","兜"]];
+const APMAP={},appY={};APPEAR.forEach(e=>{APMAP[e[2]]=e;appY[e[2]]=e[0];});
+const DEAD={"張角":184,"張寶":184,"張梁":184,"韓馥":191,"孫堅":191,"董卓":192,"劉焉":194,"陶謙":194,"公孫瓚":199,"袁術":199,"孫策":200,"袁紹":202,"公孫度":204,"孔融":208,"劉表":208,"馬騰":212,"張濟":196,"郭汜":197,"典韋":197,"呂布":198,"陳宮":198,"高順":198,"李傕":198,"華雄":191,"樊稠":195,"徐榮":192,"顏良":200,"文醜":200,"淳於瓊":200,"田豐":200,"沮授":200,"紀靈":199,"逢紀":202,"許攸":204,"審配":204,"孫翊":204,"袁譚":205,"郭圖":205,"高幹":206,"太史慈":206,"郭嘉":207,"袁熙":207,"袁尚":207,"周瑜":210,"王累":211,"荀彧":212,"張松":212,"馬休":212,"馬鐵":212,"董襲":213,"龐統":214,"張任":214,"荀攸":214,"嚴綱":191,"祖茂":190,"李儒":192,"高覽":201,"蔡瑁":208,"張允":208,"蒯良":207,"盧植":192,"皇甫嵩":195,"朱儁":195};
+const SKIPAP=new Set(["姜維","鍾會","鄧艾","諸葛瞻","曹叡","司馬師","司馬昭","夏侯霸","諸葛恪"]);
+const WILDONLY=new Set(["諸葛亮","龐統","徐庶","黃忠","魏延","馬良","馬謖","甘寧","陸遜","廖化"]);
+const INITD=[["馬騰",80,82,90,54,100,84,"山","長劍","硬皮"],["韓遂",68,43,79,81,76,78,"平","短劍","綸巾"],["侯選",81,72,90,43,71,53,"山","薤刀","籠手"],["成宜",84,66,89,25,73,41,"平","矛","籠手"],["程銀",80,73,91,34,78,54,"山","矛","籠手"],["張橫",81,64,88,37,75,36,"平","矛","籠手"],["趙月",77,60,87,38,68,42,"平","飛劍","籠手"],["劉備",78,71,91,65,100,99,"平","長劍","兜"],["關羽",97,97,97,84,99,88,"水","偃月刀","籠手"],["張飛",99,98,98,20,98,35,"山","矛","硬皮"],["董卓",88,87,91,47,100,11,"山","大劍","硬皮"],["李儒",53,44,71,92,89,40,"平","短劍","綸巾"],["呂布",99,99,99,17,30,10,"山","方天畫戟","甲冑"],["徐榮",60,52,84,30,79,47,"平","長劍","籠手"],["張濟",71,55,83,13,74,21,"平","飛劍","籠手"],["賈詡",52,46,76,95,70,65,"平","短劍","綸巾"],["李傕",70,72,90,17,82,24,"山","三尖刀","籠手"],["郭汜",66,62,88,24,81,12,"水","雙戟","籠手"],["華雄",95,90,90,32,85,43,"山","長劍","兜"],["樊稠",86,70,89,29,71,44,"山","薤刀","籠手"],["袁紹",75,70,87,52,100,50,"水","長劍","硬皮"],["顏良",91,89,91,37,87,52,"山","鉤鐮刀","兜"],["文醜",92,90,90,31,83,50,"山","長劍","兜"],["田豐",40,35,68,93,90,89,"平","短劍","綸巾"],["高覽",87,70,91,49,69,54,"水","矛","籠手"],["袁熙",64,50,83,23,83,46,"平","飛劍","籠手"],["郭圖",54,31,65,80,82,25,"平","短劍","綸巾"],["沮授",52,41,73,84,88,71,"平","短劍","綸巾"],["審配",71,66,89,80,90,65,"水","飛劍","綸巾"],["袁譚",70,57,84,30,80,45,"平","薤刀","籠手"],["逢紀",60,54,84,73,80,48,"平","短劍","綸巾"],["曹操",82,84,90,89,100,97,"山","破斬劍","甲冑"],["于禁",77,79,91,56,86,59,"水","薤刀","兜"],["夏侯惇",94,89,91,60,92,68,"山","單鉤鎗","兜"],["曹仁",84,76,90,59,89,64,"水","矛","籠手"],["夏侯淵",96,87,91,33,91,51,"山","眉尖刀","籠手"],["曹洪",85,69,90,56,87,60,"平","薤刀","籠手"],["樂進",80,56,85,50,85,60,"平","矛","籠手"],["孫策",90,95,95,61,100,90,"水","大劍","硬皮"],["韓當",84,70,89,50,83,88,"水","矛","籠手"],["太史慈",92,94,94,49,85,76,"山","單鉤鎗","兜"],["黃蓋",72,79,91,63,84,80,"水","薤刀","籠手"],["程普",80,60,85,68,89,79,"平","雙戟","兜"],["朱治",71,60,87,55,88,68,"平","短劍","綸巾"],["周善",81,67,90,46,85,54,"水","飛劍","綸巾"],["陳武",78,65,89,36,77,32,"水","矛","籠手"],["劉璋",61,39,71,44,100,77,"平","短劍","綸巾"],["王甫",62,38,75,79,80,53,"平","短劍","綸巾"],["黃權",59,42,78,78,87,68,"平","短劍","綸巾"],["雷銅",91,82,90,34,75,51,"山","矛","籠手"],["張任",90,84,90,74,93,90,"山","雙戟","兜"],["嚴顏",85,86,90,66,86,86,"山","薤刀","兜"],["吳蘭",80,70,91,43,75,61,"山","矛","兜"],["吳懿",78,68,87,73,81,75,"水","長劍","兜"],["張松",38,19,60,90,73,59,"平","短劍","綸巾"],["法正",61,33,66,92,72,82,"平","短劍","綸巾"],["孟達",80,72,90,76,70,60,"山","薤刀","籠手"]];
+const SHIBU=[["劉焉",70,52,80,76,100,72,"平","長劍","兜"],["陶謙",62,55,82,70,100,75,"平","長劍","硬皮"],["韓馥",58,45,75,55,100,50,"平","短劍","綸巾"],["張繡",85,86,90,55,100,60,"山","單鉤鎗","兜"],["公孫度",72,70,88,72,100,55,"平","長劍","硬皮"],["曹豹",70,62,80,40,75,45,"平","矛","籠手"],["荀攸",60,38,70,96,95,80,"平","短劍","綸巾"]];
+const INJECT={};APPEAR.forEach(e=>{INJECT[e[2]]=[e[3],e[4],e[5],e[6],e[7],e[8],e[9],e[10],e[11]];});INITD.concat(SHIBU).forEach(r=>{INJECT[r[0]]=r.slice(1);});
+function aliveAt(n,y){return !(DEAD[n]&&DEAD[n]<y);}
+function injectGD(n){if(GD[n])return;const s=INJECT[n];if(!s)return;GD[n]=s;GEN[n]=[s[1],s[3],s[2]];}
+function advanceAppear(){if(!state.apst)return;APPEAR.forEach(e=>{const n=e[2],s=state.apst[n];if(DEAD[n]&&DEAD[n]<state.year){return;}if(s==='p'&&state.year>=e[0]){state.apst[n]='w';}else if(s==='w'&&!SKIPAP.has(n)&&state.year>e[0]){injectGD(n);const c=state.cs[e[1]];if(c&&!c.wild.includes(n)&&!c.gens.includes(n))c.wild.push(n);state.apst[n]='y';}});}
+function reinjectAppeared(){CITIES.forEach(c=>{const s=state.cs[c.id];if(!s)return;s.gens.forEach(injectGD);s.wild.forEach(injectGD);});}
 function initGame(pid){
   const sc=curScenario,cs={};GS={};zoom=1;zx=0;zy=0;zsel=false;zdrag=false;var hz=$("hud-zoom");if(hz){hz.textContent="🔍";hz.title="放大";}
   CITIES.forEach(c=>{cs[c.id]={owner:null,land:80+rnd(70),ind:70+rnd(60),pop:15000+rnd(15000),flood:50+rnd(40),gov:60+rnd(30),gold:50+rnd(100),rice:200+rnd(300),troops:1000+rnd(2000),tre:0,gens:[],wild:[]};});
-  const apply=(fid,cities,gens,gov)=>{const gv=(gov!=null?gov:(FGOV[fid]!=null?FGOV[fid]:100));cities.forEach(cid=>{const c=cs[cid];c.owner=fid;ownCityBoost(c);c.gov=gv;});gens.forEach((g,i)=>cs[cities[i%cities.length]].gens.push(g));};
+  const apply=(fid,cities,gens,gov)=>{const gv=(gov!=null?gov:(FGOV[fid]!=null?FGOV[fid]:100));cities.forEach(cid=>{const c=cs[cid];c.owner=fid;ownCityBoost(c);c.gov=gv;});gens.filter(g=>!((appY[g]&&appY[g]>sc.year)||(DEAD[g]&&DEAD[g]<sc.year))).forEach((g,i)=>{injectGD(g);cs[cities[i%cities.length]].gens.push(g);});};
   if(sc.setup){Object.keys(sc.setup).forEach(fid=>apply(fid,sc.setup[fid].cities,sc.setup[fid].gens,sc.setup[fid].gov));}
   else{FACTIONS.forEach(f=>{if(f.cities.length)apply(f.id,f.cities,f.gens);});}
-  (sc.wild||WILD).forEach(([g,cid])=>cs[cid].wild.push(g));
+  const officers=new Set();CITIES.forEach(c=>cs[c.id].gens.forEach(g=>officers.add(g)));
+  const apst={};
+  APPEAR.forEach(e=>{const n=e[2];if(officers.has(n)){apst[n]='g';return;}
+    if(DEAD[n]&&DEAD[n]<sc.year){apst[n]='d';return;}
+    if(SKIPAP.has(n)){apst[n]='w';return;}
+    if(e[0]<=sc.year){injectGD(n);const c=cs[e[1]];if(!WILDONLY.has(n)&&c.owner!=null&&c.gens.length<10){c.gens.push(n);apst[n]='g';}else{c.wild.push(n);apst[n]='y';}}
+    else{apst[n]='p';}});
+  (sc.wild||WILD).forEach(([g,cid])=>{if(officers.has(g)||appY[g]||(DEAD[g]&&DEAD[g]<sc.year))return;cs[cid].wild.push(g);});
   const alive={};FACTIONS.forEach(f=>alive[f.id]=sc.setup?!!sc.setup[f.id]:f.cities.length>0);
-  state={cs,year:sc.year,month:sc.month,player:pid,alive,ap:0,maxAp:0};recalcAp();
+  state={cs,year:sc.year,month:sc.month,player:pid,alive,ap:0,maxAp:0,apst:apst,wildTimer:{}};reinjectAppeared();recalcAp();
   gameOver=false;selected=null;activeMenu=null;pendingAction=null;
   $('start').style.display='none';
   exitCity();log("sys","【"+facName(pid)+"】起兵！"+sc.name+"，逐鹿天下。");refreshAll();playBgm();
@@ -369,7 +420,7 @@ function resolveBattle(fromId,toId,isAI,aiFac){
     const ap=data.atk*(0.5+aL/130)*(0.85+Math.random()*0.4)+aW*6;
     const dp=data.def*(0.5+dL/130)*(0.85+Math.random()*0.4)*(1+wall/200)+dW*6;
     data.atk=Math.max(0,data.atk-Math.max(0,Math.floor(dp*0.10)-aArm));data.def=Math.max(0,data.def-Math.max(0,Math.floor(ap*0.10)-dArm));}
-  if(data.def<=0&&data.atk>0){data.win=true;const old=D.owner;D.owner=A.owner;D.troops=data.atk;D.gens=[];D.gov=40;if(aG){A.gens=A.gens.filter(g=>g!==aG);D.gens.push(aG);}if(old)checkElim(old);}
+  if(data.def<=0&&data.atk>0){data.win=true;const old=D.owner;D.owner=A.owner;D.troops=data.atk;D.gens=[];D.gov=40;capturedMonth.push(data.toId);if(aG){A.gens=A.gens.filter(g=>g!==aG);D.gens.push(aG);}if(old)checkElim(old);}
   else{A.troops+=data.atk;D.troops=data.def;}
   {const aKill=data.dMax-data.def,dKill=data.aMax-data.atk;if(aG)addExp(aG,Math.floor(aKill/100),data.attacker);if(dG&&!data.win)addExp(dG,Math.floor(dKill/100),data.defender);}
   if(isAI){log("war","✖ 【"+facName(aiFac)+"】"+(data.win?"攻陷 ":"進攻 ")+cityById(toId).name+(data.win?"":"（守住）"));checkVictory();}
@@ -421,7 +472,7 @@ function endTurn(){if(gameOver)return;$('setmenu').style.display='none';$('setme
   if(dz){let pick=[];FACTIONS.forEach(f=>{if(!state.alive[f.id])return;if(Math.random()<0.15){const cz=CITIES.filter(c=>state.cs[c.id].owner===f.id);if(cz.length)pick.push(cz[rnd(cz.length)].id);}});
     for(let i=pick.length-1;i>0;i--){const j=rnd(i+1);const t=pick[i];pick[i]=pick[j];pick[j]=t;}pick=pick.slice(0,3);
     pick.forEach(cid=>{const s=state.cs[cid];const mit=1-s.flood/100;const dl=Math.round((15+rnd(36))*mit),di=Math.round((15+rnd(36))*mit),dfv=4+rnd(9);s.land=Math.max(0,s.land-dl);s.ind=Math.max(0,s.ind-di);s.flood=Math.max(0,s.flood-dfv);if(s.owner===state.player)log("war",(dz==='洪水'?"☂ ":"☀ ")+cityById(cid).name+" 遭"+dz+"！土地-"+dl+" 產業-"+di+" 防災-"+dfv);});}
-  state.month++;if(state.month>12){state.month=1;state.year++;}
+  CITIES.forEach(c=>{const s=state.cs[c.id];if(!s.owner)return;s.gens.forEach(g=>{if(!actedMonth.includes(g))addExp(g,5,s.owner);});});actedMonth=[];capturedMonth=[];processWild();state.month++;if(state.month>12){state.month=1;state.year++;advanceAppear();}
   recalcAp();log("sys","═══ "+state.year+"年 "+state.month+"月 ═══");refreshAll();autoSave();}
 function aiTurn(fid){let ap=Math.min(12,3+CITIES.filter(c=>state.cs[c.id].owner===fid).length);
   const cities=CITIES.filter(c=>state.cs[c.id].owner===fid).map(c=>c.id);
@@ -499,6 +550,43 @@ function cmdTodo(){$('hud-msg').textContent='⚙ 此功能尚在開發中（待�
 function cmdPop(){if(!ownSel())return;const c=state.cs[selected];if(!needAp())return;if(c.gold<30){log("sys","金不足（需 30）。");return;}c.gold-=30;c.pop=Math.min(999900,c.pop+200+Math.floor(c.pop*0.04));spend();log("good","["+cityById(selected).name+"] 市集開發，人口→"+c.pop);after();}
 function cmdSellTre(){if(!ownSel())return;const c=state.cs[selected];if(!needAp())return;if((c.tre||0)<1){log("sys","無財寶可賣。");return;}c.tre-=1;c.gold=Math.min(9999,c.gold+300);spend();log("good","["+cityById(selected).name+"] 賣出財寶 1（+300金），餘 "+c.tre);after();}
 function cmdBuyTre(){if(!ownSel())return;const c=state.cs[selected];if(!needAp())return;if(c.gold<500){log("sys","金不足（需 500）。");return;}if((c.tre||0)>=999){log("sys","財寶已達上限。");return;}c.gold-=500;c.tre=(c.tre||0)+1;spend();log("good","["+cityById(selected).name+"] 購入財寶 1（-500金），共 "+c.tre);after();}
+function intel(g){return 0.8+gsOf(g).zhi/250;}
+function markActed(ns){ns.forEach(n=>{if(!actedMonth.includes(n))actedMonth.push(n);});}
+function pkGuard(){if(!ownSel())return false;if(capturedMonth.includes(selected)){log("sys","此城本月剛佔領，無法執行內政。");return false;}if(!state.cs[selected].gens.length){log("sys","此城無武將可指派。");return false;}if(!needAp())return false;return true;}
+function openPicker(o){pkTitle=o.title;pkMode=o.mode;pkMax=o.max||99;pkCb=o.onOk;pkSel=[];pkPage=0;renderPicker();$('picker').style.display='flex';}
+function renderPicker(){const s=state.cs[selected];const list=s.gens;const per=10,pages=Math.max(1,Math.ceil(list.length/per));if(pkPage>=pages)pkPage=pages-1;if(pkPage<0)pkPage=0;let html='';for(let i=pkPage*per;i<Math.min(list.length,pkPage*per+per);i++){const g=list[i];const st=genStats(g);const on=pkSel.includes(g);html+='<div class="gcard'+(on?' psel':'')+'" onclick="pkToggle('+i+')"><div class="pkchk">'+(on?'☑':'☐')+'</div><div class="gportrait">'+g.charAt(0)+'</div><div class="ginfo"><div class="gname">'+g+'　<small>Lv'+st.lv+'</small></div><div class="gstats">體 '+st.hp+'　德 '+st.de+'　智 '+st.zhi+'　武 '+st.wu+'</div></div></div>';}$('pk-body').innerHTML=html;$('pk-page').textContent=(pkPage+1)+' / '+pages;$('pk-title').textContent=pkTitle+(pkMode==='multi'?'（複選'+(pkMax<99?'上限'+pkMax+'人':'')+'，已選'+pkSel.length+'）':'（擇一）');}
+function pkToggle(i){const g=state.cs[selected].gens[i];if(!g)return;const max=pkMode==='single'?1:pkMax;const j=pkSel.indexOf(g);if(j>=0){pkSel.splice(j,1);}else{if(pkSel.length>=max)return;pkSel.push(g);}renderPicker();}
+function pkPageF(d){pkPage+=d;renderPicker();}
+function pkConfirm(){if(!pkSel.length)return;const cb=pkCb,sel=pkSel.slice();$('picker').style.display='none';if(cb)cb(sel);}
+function doDev(kind,g){const c=state.cs[selected];const zhi=gsOf(g).zhi;let msg;if(kind==='land'){if(c.gold<20){log("sys","金不足（需20）。");return;}c.gold-=20;c.land=Math.min(999,c.land+10+Math.floor(zhi/(3+rnd(4))));msg="土地→"+c.land;}else if(kind==='ind'){if(c.gold<20){log("sys","金不足（需20）。");return;}c.gold-=20;c.ind=Math.min(999,c.ind+10+Math.floor(zhi/(3+rnd(4))));msg="產業→"+c.ind;}else if(kind==='pop'){if(c.gold<30){log("sys","金不足（需30）。");return;}c.gold-=30;c.pop=Math.min(999900,c.pop+1000+100*Math.floor(zhi/(3+rnd(4))));msg="人口→"+c.pop;}else{if(c.gold<20){log("sys","金不足（需20）。");return;}c.gold-=20;c.flood=Math.min(100,c.flood+10+Math.floor(zhi/(8+rnd(3))));msg="防災→"+c.flood;}spend();markActed([g]);addExp(g,3,c.owner);log("good","["+cityById(selected).name+"] "+g+" 執行內政，"+msg+"（+3經驗）");after();}
+function recruitChance(de){return Math.min(0.99,0.60+Math.floor(de/(3+rnd(4)))/100);}
+function processWild(){if(!state.wildTimer)state.wildTimer={};CITIES.forEach(c=>{const s=state.cs[c.id];if(!s.wild||!s.wild.length)return;s.wild.slice().forEach(n=>{state.wildTimer[n]=(state.wildTimer[n]||0)+1;if(state.wildTimer[n]>=4){const adj=ADJ[c.id];if(adj&&adj.length){const to=adj[rnd(adj.length)];s.wild=s.wild.filter(x=>x!==n);state.cs[to].wild.push(n);state.wildTimer[n]=0;}}});});}
+function doGather(g){const c=state.cs[selected],cid=selected,de=genStats(g).de,nm=cityById(cid).name;spend();markActed([g]);addExp(g,3,c.owner);
+  if(Math.random()>=0.60){log("sys","["+nm+"] "+g+" 收集情報：查無所獲。");after();return;}
+  const waitG=APPEAR.filter(e=>e[1]===cid&&state.apst&&state.apst[e[2]]==='w'&&!(DEAD[e[2]]&&DEAD[e[2]]<state.year)).map(e=>e[2]);
+  const wildG=(c.wild||[]).slice();
+  let opts=['gold','rice','tre'];if(waitG.length)opts.push('wait');if(wildG.length)opts.push('meet');
+  const pick=opts[rnd(opts.length)];
+  if(pick==='gold'){const v=70+rnd(181);c.gold=Math.min(9999,c.gold+v);log("good","["+nm+"] "+g+" 收集情報，得金 "+v);}
+  else if(pick==='rice'){const v=70+rnd(181);c.rice=Math.min(9999,c.rice+v);log("good","["+nm+"] "+g+" 收集情報，得米 "+v);}
+  else if(pick==='tre'){const v=1+rnd(5);c.tre=Math.min(999,(c.tre||0)+v);log("good","["+nm+"] "+g+" 收集情報，得財寶 "+v);}
+  else if(pick==='wait'){const t=waitG[rnd(waitG.length)];injectGD(t);
+    if(c.gens.length>=10){c.wild.push(t);state.apst[t]='y';state.wildTimer[t]=0;log("sys","發現待出現武將 "+t+"，惜本城武將已滿，"+t+" 暫為在野。");}
+    else if(Math.random()<recruitChance(de)){c.gens.push(t);state.apst[t]='g';log("good","★ "+g+" 尋得 "+t+" 並招攬入麾下！");}
+    else{c.wild.push(t);state.apst[t]='y';state.wildTimer[t]=0;log("war","發現 "+t+"，招攬未成，"+t+" 滯留"+nm+"為在野。");}}
+  else{const t=wildG[rnd(wildG.length)];
+    if(c.gens.length>=10){log("sys","遇見在野 "+t+"，惜本城武將已滿。");}
+    else if(Math.random()<recruitChance(de)){c.wild=c.wild.filter(x=>x!==t);c.gens.push(t);if(state.apst&&state.apst[t]!=='g')state.apst[t]='g';log("good","★ "+g+" 遇見在野 "+t+"，招攬成功！");}
+    else{log("war","遇見在野 "+t+"，"+t+" 婉拒了招攬。");}}
+  after();}
+function doStudy(sel){const c=state.cs[selected];let done=[];sel.forEach(g=>{if(c.gold<80)return;c.gold-=80;const s=gsOf(g);s.zhi+=1+rnd(2);done.push(g);});if(!done.length){log("sys","金不足，每人進修需 80 金。");return;}spend();markActed(done);log("good","["+cityById(selected).name+"] "+done.join("、")+" 入書院進修，智力提升。");after();}
+function cmdHeal(){if(!pkGuard())return;openPicker({title:'醫館',mode:'multi',max:99,onOk:function(s){$('hud-msg').textContent='⚙ 醫館（體力系統開發中，待新增）。';}});}
+function cmdKaiken(){if(!pkGuard())return;openPicker({title:'土地開墾',mode:'single',max:1,onOk:s=>doDev('land',s[0])});}
+function cmdShogyo(){if(!pkGuard())return;openPicker({title:'鼓勵工商',mode:'single',max:1,onOk:s=>doDev('ind',s[0])});}
+function cmdChisui(){if(!pkGuard())return;openPicker({title:'防災',mode:'single',max:1,onOk:s=>doDev('flood',s[0])});}
+function cmdPop(){if(!pkGuard())return;openPicker({title:'市集開發',mode:'single',max:1,onOk:s=>doDev('pop',s[0])});}
+function cmdGather(){if(!pkGuard())return;openPicker({title:'收集情報',mode:'single',max:1,onOk:s=>doGather(s[0])});}
+function cmdStudy(){if(!pkGuard())return;openPicker({title:'書院進修',mode:'multi',max:99,onOk:doStudy});}
 const FAC={
  "遼東":{arm:0,shop:1,heal:0},"薊":{arm:'low',shop:0,heal:1},"晉陽":{arm:'low',shop:0,heal:1},"臨淄":{arm:0,shop:0,heal:1},
  "鄴":{arm:'best',shop:1,heal:1},"西安陽":{arm:'low',shop:0,heal:1},"武威":{arm:'low',shop:1,heal:1},"安定":{arm:0,shop:1,heal:1},
@@ -518,7 +606,7 @@ const CMDTREE={
       {t:'武將移動',ic:'🐴',fn:cmdIdo}],
  army:[{t:'出征',ic:'⚔️',fn:cmdShutsujin},{t:'征兵',ic:'🙋',fn:cmdChohei},{t:'偵察',ic:'🔭',fn:cmdScout},{t:'任命',ic:'📜',fn:cmdTodo}],
  store:[{t:'運送物資',ic:'🐎',fn:cmdYuso},{t:'開倉濟民',ic:'🍚',fn:cmdRelief},{t:'賞賜武將',ic:'🎁',fn:cmdTodo},{t:'待新增',ic:'➕',fn:cmdTodo}],
- market:[{t:'裝備屋',ic:'🛡️',fac:'arm',fn:openShop},{t:'書院',ic:'📖',fac:'study',fn:cmdStudy},{t:'醫館',ic:'🩺',fac:'heal',fn:cmdTodo},{t:'商店',ic:'🪙',fac:'shop',sub:[{t:'買米',ic:'🍚',fn:cmdBuyRice},{t:'賣米',ic:'💴',fn:cmdSellRice},{t:'賣寶',ic:'💎',fn:cmdSellTre},{t:'買寶',ic:'🛒',fn:cmdBuyTre}]}]
+ market:[{t:'裝備屋',ic:'🛡️',fac:'arm',fn:openShop},{t:'書院',ic:'📖',fac:'study',fn:cmdStudy},{t:'醫館',ic:'🩺',fac:'heal',fn:cmdHeal},{t:'商店',ic:'🪙',fac:'shop',sub:[{t:'買米',ic:'🍚',fn:cmdBuyRice},{t:'賣米',ic:'💴',fn:cmdSellRice},{t:'賣寶',ic:'💎',fn:cmdSellTre},{t:'買寶',ic:'🛒',fn:cmdBuyTre}]}]
 };
 const TOPCARDS=[{t:'政廳',ic:'🏛️',key:'gov'},{t:'軍隊',ic:'🚩',key:'army'},{t:'倉庫',ic:'🏯',key:'store'},{t:'市集',ic:'🏪',key:'market'}];
 function renderMenu(){const box=$('builds');if(!box)return;box.innerHTML='';if(!selected)return;if(!ownSel()){box.innerHTML='<div class="hint" style="grid-column:1/-1">此城非我方領地</div>';return;}let items;if(menuPath.length===0){items=TOPCARDS;}else{let node=CMDTREE[menuPath[0]];for(let i=1;i<menuPath.length;i++){node=node[menuPath[i]].sub;}items=node;}if(menuPath.length===1&&menuPath[0]==='market'){const _f=cityFac(selected);items=items.filter(it=>it.fac==='arm'?!!_f.arm:!!_f[it.fac]);}items.forEach((it,i)=>{const d=document.createElement('div');d.className='bld';d.innerHTML='<div class="bav">'+(it.ic||'')+'</div>'+it.t;d.onclick=()=>menuClick(it,i);box.appendChild(d);});}
@@ -589,7 +677,7 @@ function slotKey(i){return i===0?'sg_save_v1':'sg_slot_'+i;}
 function slotInfo(i){try{const raw=localStorage.getItem(slotKey(i));if(!raw)return null;let d;try{d=JSON.parse(decodeURIComponent(escape(atob(raw))));}catch(e){d=JSON.parse(raw);}return(d&&d.state)?d:null;}catch(e){return null;}}
 function scenName(sid){const s=SCENARIOS.find(x=>x.id===sid);return s?s.name:'';}
 function lordName(d){const s=SCENARIOS.find(x=>x.id===d.sid);const p=d.state.player;return(s&&s.names&&s.names[p])||(facOf(p)?facOf(p).name:p);}
-function doLoadData(d){curScenario=SCENARIOS.find(s=>s.id===d.sid)||SCENARIOS[0];state=d.state;history=d.history||[];GS=d.gs||{};gameOver=false;zoom=1;zx=0;zy=0;zsel=false;zdrag=false;{var hz2=$("hud-zoom");if(hz2){hz2.textContent="🔍";hz2.title="放大";}}selected=null;activeMenu=null;pendingAction=null;$('savebox').style.display='none';$('mainmenu').style.display='none';$('start').style.display='none';$('setmenu').style.display='none';$('setmenu2').style.display='none';exitCity();refreshAll();log('sys','讀檔完成，'+state.year+'年'+state.month+'月。');playBgm();}
+function doLoadData(d){curScenario=SCENARIOS.find(s=>s.id===d.sid)||SCENARIOS[0];state=d.state;history=d.history||[];GS=d.gs||{};gameOver=false;reinjectAppeared();zoom=1;zx=0;zy=0;zsel=false;zdrag=false;{var hz2=$("hud-zoom");if(hz2){hz2.textContent="🔍";hz2.title="放大";}}selected=null;activeMenu=null;pendingAction=null;$('savebox').style.display='none';$('mainmenu').style.display='none';$('start').style.display='none';$('setmenu').style.display='none';$('setmenu2').style.display='none';exitCity();refreshAll();log('sys','讀檔完成，'+state.year+'年'+state.month+'月。');playBgm();}
 function doLoad(i){const d=slotInfo(i);if(d)doLoadData(d);else alert('沒有存檔。');}
 function openSaveUI(mode){$('setmenu2').style.display='none';$('sb-title').textContent=mode==='save'?'存　檔':'讀　檔';let rows='';for(let i=0;i<=10;i++){const info=slotInfo(i);const name=i===0?'自動存檔':('存檔 '+i);const desc=info?(info.state.year+'年'+info.state.month+'月 ・ '+lordName(info)+' ・ '+scenName(info.sid)):'（空）';const dis=(mode==='save'&&i===0)||(mode==='load'&&!info);rows+='<div class="slotrow'+(dis?' dis':'')+'" data-i="'+i+'"><b>'+name+'</b><span>'+desc+'</span></div>';}$('sb-body').innerHTML='<div style="font-size:12px;color:#7a4a35;margin-bottom:8px">'+(mode==='save'?'點欄位存檔（自動存檔由系統管理，不可手動覆蓋）':'點有進度的欄位讀取')+'</div><div style="display:flex;flex-direction:column;gap:5px;max-height:50vh;overflow-y:auto">'+rows+'</div>';$('sb-body').querySelectorAll('.slotrow').forEach(el=>{if(el.classList.contains('dis'))return;el.onclick=()=>slotClick(mode,parseInt(el.dataset.i));});$('sb-btns').innerHTML='<button id="sb-x1">'+(mode==='save'?'複製備份碼':'貼備份碼讀取')+'</button><button id="sb-x2">關閉</button>';$('sb-x1').onclick=mode==='save'?exportCode:importCode;$('sb-x2').onclick=()=>{$('savebox').style.display='none';};$('savebox').style.display='flex';}
 function slotClick(mode,i){if(mode==='save'){if(!state){alert('尚未開始遊戲。');return;}if(i===0)return;const code=encodeSave();let ok=true;try{localStorage.setItem(slotKey(i),code);}catch(e){ok=false;}if(!ok){alert('此瀏覽器儲存被封鎖，請改用「複製備份碼」。');return;}alert('✔ 已存到 存檔 '+i+'（'+state.year+'年'+state.month+'月）');openSaveUI('save');}else{const info=slotInfo(i);if(info)doLoadData(info);}}
