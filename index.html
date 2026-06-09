@@ -702,5 +702,6 @@ window.addEventListener('orientationchange',()=>setTimeout(fitStage,250));
 fitStage();
 (async()=>{mapImg=await tryLoadAsset(encodeURI('GPT修改圖/三國大地圖.jpg'));if(!mapImg)mapImg=await tryLoadAsset('map.png');battleImg=await tryLoadAsset('battle.png');bgm=new Audio(encodeURI('音樂/大地圖.mp3'));bgm.loop=true;bgm.volume=0.55;bgm2=new Audio(encodeURI('音樂/戰鬥.mp3'));bgm2.loop=true;bgm2.volume=0.55;if(state)drawMap();buildStart();try{if(localStorage.getItem('sg_save_v1'))$('mm-continue').style.display='block';}catch(e){}})();
 </script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}</script>
 </body>
 </html>
